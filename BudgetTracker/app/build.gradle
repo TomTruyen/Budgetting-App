@@ -52,4 +52,7 @@ dependencies {
 
     // Expandable FAB
     implementation "com.nambimobile.widgets:expandable-fab:1.1.1"
+
+    // Animations
+    implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
 }
