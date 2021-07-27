@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.OvershootInterpolator
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -11,12 +12,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.databinding.FragmentDashboardBinding
 import com.tomtruyen.budgettracker.models.dashboard.BudgetAdapter
 import com.tomtruyen.budgettracker.models.dashboard.ListItem
-import jp.wasabeef.recyclerview.adapters.AlphaInAnimationAdapter
-import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter
-import jp.wasabeef.recyclerview.adapters.SlideInLeftAnimationAdapter
+import jp.wasabeef.recyclerview.adapters.*
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import jp.wasabeef.recyclerview.animators.ScaleInAnimator
 import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import java.util.*
 import kotlin.collections.ArrayList
 
@@ -44,10 +44,9 @@ class DashboardFragment : Fragment() {
 
         mAdapter = BudgetAdapter(mItems)
         val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.adapter = ScaleInAnimationAdapter(mAdapter).apply {
-            setDuration(250)
-        }
+        recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.itemAnimator = SlideInRightAnimator()
 
         binding.incomeBtn.setOnClickListener {
             addItem(ListItem(Date(), "Title", 123456.0))
