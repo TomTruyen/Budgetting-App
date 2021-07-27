@@ -1,10 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.dashboard.DashboardFragment">
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        
+        >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:textColor="@color/green"
+            android:text="$ 0.00"
+            />
+    </androidx.cardview.widget.CardView>
 
     <TextView
         android:id="@+id/text_dashboard"
@@ -21,4 +35,44 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
          />
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+
+    <com.nambimobile.widgets.efab.ExpandableFabLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <com.nambimobile.widgets.efab.Overlay
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <com.nambimobile.widgets.efab.ExpandableFab
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:layout_marginEnd="@dimen/efab_ui_margin_medium"
+            android:layout_marginRight="@dimen/efab_ui_margin_medium"
+            android:layout_marginBottom="@dimen/efab_ui_margin_medium"
+            app:efab_color="@color/primary"
+            app:efab_closingAnticipateTension="0"
+            app:efab_iconAnimationRotationDeg="-225" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:id="@+id/incomeBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_color="@color/green"
+            app:label_backgroundColor="@color/green"
+            app:fab_icon="@drawable/ic_income"
+            app:label_text="Add income" />
+
+        <com.nambimobile.widgets.efab.FabOption
+            android:id="@+id/expenseBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:fab_icon="@drawable/ic_expense"
+            app:fab_color="@color/red"
+            app:label_backgroundColor="@color/red"
+            app:label_text="Add expense" />
+    </com.nambimobile.widgets.efab.ExpandableFabLayout>
+
+</RelativeLayout>
