@@ -9,10 +9,12 @@ import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.R
+import com.tomtruyen.budgettracker.services.DatabaseService
 import com.tomtruyen.budgettracker.utils.Utils
 
-class BudgetAdapter(private val mItems : List<ListItem>, private val mContext: Context?) : RecyclerView.Adapter<BudgetAdapter.ViewHolder>(){
+class BudgetAdapter(private val mContext: Context?) : RecyclerView.Adapter<BudgetAdapter.ViewHolder>(){
     private val mUtils : Utils = Utils()
+    val databaseService : DatabaseService = DatabaseService(mContext)
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dateText: TextView = itemView.findViewById(R.id.date)
@@ -31,23 +33,28 @@ class BudgetAdapter(private val mItems : List<ListItem>, private val mContext: C
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(viewHolder: BudgetAdapter.ViewHolder, position: Int) {
-        val item : ListItem = mItems[position]
+        val item : Transaction? = databaseService.readOne(position)
 
-
-
-        viewHolder.dateText.text = mUtils.toFormatString(item.date)
-        viewHolder.titleText.text = item.title
-        viewHolder.priceText.text = mUtils.toCurrencyString(item.price)
-        if(mContext != null) {
-            if(item.isIncome) {
-                viewHolder.priceText.setTextColor(ContextCompat.getColor(mContext, R.color.green))
-            } else {
-                viewHolder.priceText.setTextColor(ContextCompat.getColor(mContext, R.color.red))
+        if(item != null) {
+            viewHolder.dateText.text = mUtils.toFormatString(item.date)
+            viewHolder.titleText.text = item.title
+            viewHolder.priceText.text = mUtils.toCurrencyString(item.price)
+            if (mContext != null) {
+                if (item.isIncome) {
+                    viewHolder.priceText.setTextColor(
+                        ContextCompat.getColor(
+                            mContext,
+                            R.color.green
+                        )
+                    )
+                } else {
+                    viewHolder.priceText.setTextColor(ContextCompat.getColor(mContext, R.color.red))
+                }
             }
         }
     }
 
     override fun getItemCount(): Int {
-        return mItems.size
+        return databaseService.length()
     }
 }

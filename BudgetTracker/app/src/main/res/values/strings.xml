@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">BudgetTracker</string>
+    <string name="app_name">Budgety</string>
     <string name="title_statistics">Statistics</string>
     <string name="title_overview">Overview</string>
     <string name="title_settings">Settings</string>

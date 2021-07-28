@@ -55,4 +55,7 @@ dependencies {
 
     // Animations
     implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
+
+    // Gson
+    implementation("com.google.code.gson:gson:2.8.6")
 }

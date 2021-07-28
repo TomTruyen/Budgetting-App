@@ -6,13 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.databinding.FragmentOverviewBinding
 import com.tomtruyen.budgettracker.models.overview.BudgetAdapter
-import com.tomtruyen.budgettracker.models.overview.ListItem
+import com.tomtruyen.budgettracker.models.overview.Transaction
 import com.tomtruyen.budgettracker.utils.Utils
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import java.util.*
@@ -23,7 +22,6 @@ class OverviewFragment : Fragment() {
     private var _binding: FragmentOverviewBinding? = null
     private val mUtils : Utils = Utils()
     private lateinit var mAdapter: BudgetAdapter
-    private var mItems : ArrayList<ListItem> = arrayListOf(ListItem(Date(), "Food", 125.00, false), ListItem(Date(), "Salary", 375.00, true))
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -36,18 +34,18 @@ class OverviewFragment : Fragment() {
     ): View {
         _binding = FragmentOverviewBinding.inflate(inflater, container, false)
 
-        mAdapter = BudgetAdapter(mItems, context)
+        mAdapter = BudgetAdapter(context)
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.itemAnimator = SlideInRightAnimator()
 
         binding.incomeBtn.setOnClickListener {
-            addItem(ListItem(Date(), "Test Income", 25.0, true))
+            addTransaction(Transaction(-1, Date(), "Test Income", 25.0, true))
         }
 
         binding.expenseBtn.setOnClickListener {
-            addItem(ListItem(Date(), "Test Expense", 100.0, false))
+            addTransaction(Transaction(-1, Date(), "Test Income", 25.0, false))
         }
 
         updateBalance()
@@ -62,7 +60,7 @@ class OverviewFragment : Fragment() {
 
     private fun updateBalance() {
         var balance = 0.0
-        mItems.forEach {
+        mAdapter.databaseService.read().forEach {
             if(it.isIncome) {
                 balance += it.price
             } else {
@@ -79,12 +77,11 @@ class OverviewFragment : Fragment() {
         }
     }
 
-    private fun addItem(item: ListItem) {
-        mItems.add(item)
+    private fun addTransaction(item: Transaction) {
+        mAdapter.databaseService.save(item)
 
-        mAdapter.notifyItemInserted(mItems.lastIndex)
-
-        binding.recyclerView.scrollToPosition(mItems.lastIndex)
+        mAdapter.notifyItemInserted(0)
+        binding.recyclerView.scrollToPosition(0)
 
         updateBalance()
     }
