@@ -1,31 +1,30 @@
 package com.tomtruyen.budgettracker.ui.dashboard
 
+import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.OvershootInterpolator
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.databinding.FragmentDashboardBinding
 import com.tomtruyen.budgettracker.models.dashboard.BudgetAdapter
 import com.tomtruyen.budgettracker.models.dashboard.ListItem
 import com.tomtruyen.budgettracker.utils.Utils
 import jp.wasabeef.recyclerview.adapters.*
-import jp.wasabeef.recyclerview.animators.FadeInAnimator
-import jp.wasabeef.recyclerview.animators.ScaleInAnimator
-import jp.wasabeef.recyclerview.animators.SlideInDownAnimator
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import java.util.*
-import kotlin.collections.ArrayList
+
 
 class DashboardFragment : Fragment() {
 
     private lateinit var dashboardViewModel: DashboardViewModel
     private var _binding: FragmentDashboardBinding? = null
-
+    private val mUtils : Utils = Utils()
     private lateinit var mAdapter: BudgetAdapter
     private var mItems : ArrayList<ListItem> = arrayListOf(ListItem(Date(), "Food", 125.00, false), ListItem(Date(), "Salary", 375.00, true))
 
@@ -53,6 +52,12 @@ class DashboardFragment : Fragment() {
             addItem(ListItem(Date(), "Test Income", 25.0, true))
         }
 
+        binding.expenseBtn.setOnClickListener {
+            addItem(ListItem(Date(), "Test Expense", 100.0, false))
+        }
+
+        updateBalance()
+
         return binding.root
     }
 
@@ -61,9 +66,32 @@ class DashboardFragment : Fragment() {
         _binding = null
     }
 
+    private fun updateBalance() {
+        var balance = 0.0
+        mItems.forEach {
+            if(it.isIncome) {
+                balance += it.price
+            } else {
+                balance -= it.price
+            }
+        }
+
+        binding.balanceText.text = mUtils.toCurrencyString(balance)
+
+        if (balance >= 0) {
+            binding.balanceText.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
+        } else {
+            binding.balanceText.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
+        }
+    }
+
     private fun addItem(item: ListItem) {
         mItems.add(item)
 
         mAdapter.notifyItemInserted(mItems.lastIndex)
+
+        binding.recyclerView.scrollToPosition(mItems.lastIndex)
+
+        updateBalance()
     }
 }

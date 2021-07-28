@@ -35,11 +35,11 @@ class BudgetAdapter(private val mItems : List<ListItem>, private val mContext: C
     override fun onBindViewHolder(viewHolder: BudgetAdapter.ViewHolder, position: Int) {
         val item : ListItem = mItems[position]
 
-        val numberFormat = NumberFormat.getCurrencyInstance(Locale.US)
+
 
         viewHolder.dateText.text = mUtils.toFormatString(item.date)
         viewHolder.titleText.text = item.title
-        viewHolder.priceText.text = numberFormat.format(item.price)
+        viewHolder.priceText.text = mUtils.toCurrencyString(item.price)
         if(mContext != null) {
             if(item.isIncome) {
                 viewHolder.priceText.setTextColor(ContextCompat.getColor(mContext, R.color.green))
