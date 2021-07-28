@@ -1,4 +1,4 @@
-package com.tomtruyen.budgettracker.models.dashboard
+package com.tomtruyen.budgettracker.models.overview
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -10,8 +10,6 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.utils.Utils
-import java.text.NumberFormat
-import java.util.*
 
 class BudgetAdapter(private val mItems : List<ListItem>, private val mContext: Context?) : RecyclerView.Adapter<BudgetAdapter.ViewHolder>(){
     private val mUtils : Utils = Utils()
@@ -26,7 +24,7 @@ class BudgetAdapter(private val mItems : List<ListItem>, private val mContext: C
         val context = parent.context
         val inflater = LayoutInflater.from(context)
 
-        val listItem = inflater.inflate(R.layout.fragment_dashboard_list_item, parent, false)
+        val listItem = inflater.inflate(R.layout.fragment_overview_list_item, parent, false)
 
         return ViewHolder(listItem)
     }

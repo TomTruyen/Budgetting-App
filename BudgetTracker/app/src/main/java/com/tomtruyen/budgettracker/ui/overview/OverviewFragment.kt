@@ -1,6 +1,5 @@
-package com.tomtruyen.budgettracker.ui.dashboard
+package com.tomtruyen.budgettracker.ui.overview
 
-import android.animation.ValueAnimator
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -11,19 +10,17 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.R
-import com.tomtruyen.budgettracker.databinding.FragmentDashboardBinding
-import com.tomtruyen.budgettracker.models.dashboard.BudgetAdapter
-import com.tomtruyen.budgettracker.models.dashboard.ListItem
+import com.tomtruyen.budgettracker.databinding.FragmentOverviewBinding
+import com.tomtruyen.budgettracker.models.overview.BudgetAdapter
+import com.tomtruyen.budgettracker.models.overview.ListItem
 import com.tomtruyen.budgettracker.utils.Utils
-import jp.wasabeef.recyclerview.adapters.*
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import java.util.*
 
 
-class DashboardFragment : Fragment() {
+class OverviewFragment : Fragment() {
 
-    private lateinit var dashboardViewModel: DashboardViewModel
-    private var _binding: FragmentDashboardBinding? = null
+    private var _binding: FragmentOverviewBinding? = null
     private val mUtils : Utils = Utils()
     private lateinit var mAdapter: BudgetAdapter
     private var mItems : ArrayList<ListItem> = arrayListOf(ListItem(Date(), "Food", 125.00, false), ListItem(Date(), "Salary", 375.00, true))
@@ -37,10 +34,7 @@ class DashboardFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        dashboardViewModel =
-            ViewModelProvider(this).get(DashboardViewModel::class.java)
-
-        _binding = FragmentDashboardBinding.inflate(inflater, container, false)
+        _binding = FragmentOverviewBinding.inflate(inflater, container, false)
 
         mAdapter = BudgetAdapter(mItems, context)
         val recyclerView: RecyclerView = binding.recyclerView

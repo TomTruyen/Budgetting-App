@@ -1,4 +1,4 @@
-package com.tomtruyen.budgettracker.models.dashboard
+package com.tomtruyen.budgettracker.models.overview
 
 import java.util.*
 

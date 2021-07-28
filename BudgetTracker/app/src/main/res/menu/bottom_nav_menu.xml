@@ -7,9 +7,9 @@
         android:title="@string/title_statistics" />
 
     <item
-        android:id="@+id/navigation_dashboard"
-        android:icon="@drawable/ic_dashboard_black_24dp"
-        android:title="@string/title_dashboard" />
+        android:id="@+id/navigation_overview"
+        android:icon="@drawable/ic_overview_black_24dp"
+        android:title="@string/title_overview" />
 
     <item
         android:id="@+id/navigation_settings"
