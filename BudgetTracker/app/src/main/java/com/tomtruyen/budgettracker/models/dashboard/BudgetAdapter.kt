@@ -1,14 +1,21 @@
 package com.tomtruyen.budgettracker.models.dashboard
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.R
+import com.tomtruyen.budgettracker.utils.Utils
+import java.text.NumberFormat
+import java.util.*
 
-class BudgetAdapter(private val mItems : List<ListItem>) : RecyclerView.Adapter<BudgetAdapter.ViewHolder>(){
+class BudgetAdapter(private val mItems : List<ListItem>, private val mContext: Context?) : RecyclerView.Adapter<BudgetAdapter.ViewHolder>(){
+    private val mUtils : Utils = Utils()
+
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dateText: TextView = itemView.findViewById(R.id.date)
         val titleText: TextView = itemView.findViewById(R.id.title)
@@ -28,14 +35,21 @@ class BudgetAdapter(private val mItems : List<ListItem>) : RecyclerView.Adapter<
     override fun onBindViewHolder(viewHolder: BudgetAdapter.ViewHolder, position: Int) {
         val item : ListItem = mItems[position]
 
-        viewHolder.dateText.text = item.date.toString()
+        val numberFormat = NumberFormat.getCurrencyInstance(Locale.US)
+
+        viewHolder.dateText.text = mUtils.toFormatString(item.date)
         viewHolder.titleText.text = item.title
-        viewHolder.priceText.text = "$${item.price}"
+        viewHolder.priceText.text = numberFormat.format(item.price)
+        if(mContext != null) {
+            if(item.isIncome) {
+                viewHolder.priceText.setTextColor(ContextCompat.getColor(mContext, R.color.green))
+            } else {
+                viewHolder.priceText.setTextColor(ContextCompat.getColor(mContext, R.color.red))
+            }
+        }
     }
 
     override fun getItemCount(): Int {
         return mItems.size
     }
-
-
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.databinding.FragmentDashboardBinding
 import com.tomtruyen.budgettracker.models.dashboard.BudgetAdapter
 import com.tomtruyen.budgettracker.models.dashboard.ListItem
+import com.tomtruyen.budgettracker.utils.Utils
 import jp.wasabeef.recyclerview.adapters.*
 import jp.wasabeef.recyclerview.animators.FadeInAnimator
 import jp.wasabeef.recyclerview.animators.ScaleInAnimator
@@ -26,7 +27,7 @@ class DashboardFragment : Fragment() {
     private var _binding: FragmentDashboardBinding? = null
 
     private lateinit var mAdapter: BudgetAdapter
-    private var mItems : ArrayList<ListItem> = arrayListOf(ListItem(Date(), "Title1", -125.52))
+    private var mItems : ArrayList<ListItem> = arrayListOf(ListItem(Date(), "Food", 125.00, false), ListItem(Date(), "Salary", 375.00, true))
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -42,14 +43,14 @@ class DashboardFragment : Fragment() {
 
         _binding = FragmentDashboardBinding.inflate(inflater, container, false)
 
-        mAdapter = BudgetAdapter(mItems)
+        mAdapter = BudgetAdapter(mItems, context)
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
         recyclerView.itemAnimator = SlideInRightAnimator()
 
         binding.incomeBtn.setOnClickListener {
-            addItem(ListItem(Date(), "Title", 123456.0))
+            addItem(ListItem(Date(), "Test Income", 25.0, true))
         }
 
         return binding.root

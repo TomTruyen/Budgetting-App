@@ -6,26 +6,28 @@
     android:layout_height="match_parent"
     tools:context=".ui.dashboard.DashboardFragment">
 
-    <androidx.cardview.widget.CardView
-        android:id="@+id/balanceCardView"
+
+
+    <TextView
+        android:id="@+id/balanceText"
         android:layout_width="match_parent"
         android:layout_height="100dp"
+        android:textColor="@color/green"
+        android:textSize="36sp"
+        android:text="$ 0.00"
+        android:textAlignment="center"
         android:layout_gravity="center"
-        app:cardElevation="5dp"
-        app:cardUseCompatPadding="true"
-        app:cardCornerRadius="5dp"
-        >
+        android:gravity="center"
+     />
 
-        <TextView
-            android:id="@+id/balanceText"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:textColor="@color/green"
-            android:textSize="36sp"
-            android:text="$ 0.00"
-            android:textAlignment="center"
-            android:layout_gravity="center" />
-    </androidx.cardview.widget.CardView>
+    <!-- Border-->
+    <TextView
+        android:id="@+id/balanceSeparator"
+        android:layout_below="@id/balanceText"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/light_grey"/>
+
 
 
     <androidx.recyclerview.widget.RecyclerView
@@ -33,7 +35,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_constrainedHeight="true"
-        android:layout_below="@id/balanceCardView"
+        android:layout_below="@id/balanceSeparator"
      />
 
     <com.nambimobile.widgets.efab.ExpandableFabLayout
