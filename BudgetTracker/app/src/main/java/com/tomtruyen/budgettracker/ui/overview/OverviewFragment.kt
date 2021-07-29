@@ -32,7 +32,6 @@ import java.util.*
 class OverviewFragment : Fragment() {
 
     private var _binding: FragmentOverviewBinding? = null
-    private val mUtils : Utils = Utils()
     private lateinit var mAdapter: BudgetAdapter
 
     private lateinit var mTransactionResultLauncher: ActivityResultLauncher<Intent>

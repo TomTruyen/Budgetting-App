@@ -10,6 +10,8 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.utils.ColorTemplate
 import com.tomtruyen.budgettracker.R
@@ -26,17 +28,23 @@ import com.github.mikephil.charting.renderer.XAxisRenderer
 import com.github.mikephil.charting.utils.MPPointF
 import com.github.mikephil.charting.utils.Transformer
 import com.github.mikephil.charting.utils.ViewPortHandler
+import com.tomtruyen.budgettracker.models.overview.BudgetAdapter
+import com.tomtruyen.budgettracker.models.overview.Transaction
 import com.github.mikephil.charting.utils.Utils as ChartUtils
 import com.tomtruyen.budgettracker.models.statistics.ChartItem
+import com.tomtruyen.budgettracker.models.statistics.StatisticsAdapter
 import com.tomtruyen.budgettracker.utils.Utils
+import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 
 
 class StatisticsFragment : Fragment() {
 
     private var _binding: FragmentStatisticsBinding? = null
     private lateinit var mAdapter: ArrayAdapter<CharSequence>
+    private lateinit var mStatisticsAdapter: StatisticsAdapter
     private lateinit var mDatabaseService : DatabaseService
     private var mSelectedMonthPosition: Int = 0
+    private var mSelectedMonthTransactions: List<Transaction> = ArrayList()
     private var mChartItems : ArrayList<ChartItem> = ArrayList()
     private val mUtils : Utils = Utils()
 
@@ -55,6 +63,9 @@ class StatisticsFragment : Fragment() {
         actionBar?.setDisplayShowTitleEnabled(false)
         actionBar?.setDisplayShowCustomEnabled(true)
 
+        mDatabaseService = DatabaseService(requireContext())
+
+        // Setup Spinner (Dropdown)
         val spinner : Spinner = inflater.inflate(R.layout.month_dropdown, container, false) as Spinner
         mAdapter = ArrayAdapter.createFromResource(
             requireContext(),
@@ -71,6 +82,7 @@ class StatisticsFragment : Fragment() {
                 id: Long
             ) {
                 mSelectedMonthPosition = position
+                updateMonthTransactions()
                 updateChart()
             }
 
@@ -78,7 +90,13 @@ class StatisticsFragment : Fragment() {
         }
         actionBar?.customView = spinner
 
-        mDatabaseService = DatabaseService(requireContext())
+        // Setup RecycleView
+        mStatisticsAdapter = StatisticsAdapter(requireContext(), mSelectedMonthTransactions)
+
+        val recyclerView: RecyclerView = binding.recyclerView
+        recyclerView.adapter = mStatisticsAdapter
+        recyclerView.layoutManager = LinearLayoutManager(context)
+
 
         return binding.root
     }
@@ -88,19 +106,24 @@ class StatisticsFragment : Fragment() {
         _binding = null
     }
 
-    private fun updateChart() {
-        val chart = binding.barChart
-
+    private fun updateMonthTransactions() {
         val transactions = mDatabaseService.read()
 
-        val monthTransactions = transactions.filter {
+        mSelectedMonthTransactions = transactions.filter {
             it.date.month == mSelectedMonthPosition
         }
+
+        mStatisticsAdapter.mTransactions = mSelectedMonthTransactions
+        mStatisticsAdapter.notifyItemRangeChanged(0, mSelectedMonthTransactions.size - 1)
+    }
+
+    private fun updateChart() {
+        val chart = binding.barChart
 
         mChartItems = ArrayList()
         val categories = resources.getStringArray(R.array.categories_array)
         categories.forEach { category ->
-            val categoryTransactions = monthTransactions.filter { it.category.equals(category) && !it.isIncome}
+            val categoryTransactions = mSelectedMonthTransactions.filter { it.category.equals(category) && !it.isIncome}
 
             val totalSpent = categoryTransactions.sumOf { abs(it.price) }
 
