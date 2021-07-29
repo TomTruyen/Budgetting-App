@@ -7,10 +7,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.Spinner
+import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -48,6 +45,7 @@ class StatisticsFragment : Fragment() {
     private lateinit var mAdapter: ArrayAdapter<CharSequence>
     private lateinit var mStatisticsAdapter: StatisticsAdapter
     private lateinit var mDatabaseService: DatabaseService
+    private lateinit var mBalanceTextView: TextView
     private var mSelectedMonthPosition: Int = Date().month
     private var mSelectedMonthTransactions: List<Transaction> = ArrayList()
     private var mChartItems: ArrayList<ChartItem> = ArrayList()
@@ -71,14 +69,19 @@ class StatisticsFragment : Fragment() {
         mDatabaseService = DatabaseService(requireContext())
 
         // Setup Spinner (Dropdown)
-        val spinner: Spinner =
-            inflater.inflate(R.layout.month_dropdown, container, false) as Spinner
+        val spinnerLayout =
+            inflater.inflate(R.layout.month_dropdown, container, false)
+
         mAdapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.month_array,
             R.layout.month_spinner_item
         )
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+
+        mBalanceTextView = spinnerLayout.findViewById(R.id.monthBalanceText)
+
+        val spinner = spinnerLayout.findViewById<Spinner>(R.id.monthSpinner)
         spinner.adapter = mAdapter
         spinner.setSelection(mSelectedMonthPosition)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -90,12 +93,13 @@ class StatisticsFragment : Fragment() {
             ) {
                 mSelectedMonthPosition = position
                 updateMonthTransactions()
+                updateBalance()
                 updateChart()
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {}
         }
-        actionBar?.customView = spinner
+        actionBar?.customView = spinnerLayout
 
         // Setup RecycleView
         mStatisticsAdapter = StatisticsAdapter(requireContext(), mSelectedMonthTransactions)
@@ -129,6 +133,20 @@ class StatisticsFragment : Fragment() {
 
         mStatisticsAdapter.mTransactions = mSelectedMonthTransactions
         mStatisticsAdapter.notifyDataSetChanged()
+    }
+
+    private fun updateBalance() {
+        var balance = 0.0
+
+        mSelectedMonthTransactions.forEach {
+            if(it.isIncome) {
+                balance += abs(it.price)
+            } else {
+                balance -= abs(it.price)
+            }
+        }
+
+        mBalanceTextView.text = mUtils.toCurrencyString(balance)
     }
 
     private fun updateChart() {
