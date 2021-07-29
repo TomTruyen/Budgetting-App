@@ -9,11 +9,13 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.tomtruyen.budgettracker.models.overview.Transaction
-import java.lang.IndexOutOfBoundsException
-import java.util.*
-import kotlin.collections.ArrayList
 
-class DatabaseService(context: Context?) : SQLiteOpenHelper(context, context?.getExternalFilesDirs(null)?.last()?.absolutePath + DATABASE_NAME, null, DATABASE_VERSION) {
+class DatabaseService(context: Context?) : SQLiteOpenHelper(
+    context,
+    context?.getExternalFilesDirs(null)?.last()?.absolutePath + DATABASE_NAME,
+    null,
+    DATABASE_VERSION
+) {
     private val gson: Gson = Gson()
 
     companion object {
@@ -25,13 +27,14 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(context, context?.ge
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
-        val createTransactionTable = ("CREATE TABLE $TABLE_TRANSACTIONS($KEY_ID INTEGER PRIMARY KEY AUTOINCREMENT,$KEY_TRANSACTION TEXT)")
+        val createTransactionTable =
+            ("CREATE TABLE $TABLE_TRANSACTIONS($KEY_ID INTEGER PRIMARY KEY AUTOINCREMENT,$KEY_TRANSACTION TEXT)")
         db?.execSQL(createTransactionTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         // Get Current Data
-        val transactions : List<Transaction> = read()
+        val transactions: List<Transaction> = read()
 
         // Drop DB
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_TRANSACTIONS")
@@ -40,14 +43,14 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(context, context?.ge
         onCreate(db)
 
         // Fill with previous data
-        if(transactions.isNotEmpty()) {
-            for(transaction in transactions) {
+        if (transactions.isNotEmpty()) {
+            for (transaction in transactions) {
                 save(transaction)
             }
         }
     }
 
-    fun read() : List<Transaction> {
+    fun read(): List<Transaction> {
         val transactions = ArrayList<Transaction>()
 
         val db = this.readableDatabase
@@ -61,9 +64,9 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(context, context?.ge
         }
 
         var id: Int
-        var transactionString : String
+        var transactionString: String
 
-        if(cursor.moveToFirst()) {
+        if (cursor.moveToFirst()) {
             do {
                 try {
                     id = cursor.getInt(cursor.getColumnIndex(KEY_ID))
@@ -73,9 +76,10 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(context, context?.ge
                     transaction.id = id
 
                     transactions.add(transaction)
-                } catch (e: JsonSyntaxException) {}
+                } catch (e: JsonSyntaxException) {
+                }
 
-            } while(cursor.moveToNext())
+            } while (cursor.moveToNext())
 
         }
         cursor.close()
@@ -83,7 +87,7 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(context, context?.ge
         return transactions
     }
 
-    fun readOne(position: Int) : Transaction? {
+    fun readOne(position: Int): Transaction? {
         return try {
             read()[position]
         } catch (e: IndexOutOfBoundsException) {
@@ -91,7 +95,7 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(context, context?.ge
         }
     }
 
-    fun length() : Int {
+    fun length(): Int {
         return read().size
     }
 
@@ -103,12 +107,13 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(context, context?.ge
             contentValues.put(KEY_TRANSACTION, gson.toJson(transaction))
 
             // New
-            if(transaction.id == -1) {
+            if (transaction.id == -1) {
                 db.insert(TABLE_TRANSACTIONS, null, contentValues)
             } else {
                 db.update(TABLE_TRANSACTIONS, contentValues, "id='${transaction.id}'", null)
             }
-        } catch (e: SQLiteException) {}
+        } catch (e: SQLiteException) {
+        }
     }
 
     fun delete(position: Int) {
@@ -117,6 +122,7 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(context, context?.ge
             val transaction = readOne(position)
 
             db.delete(TABLE_TRANSACTIONS, "id='${transaction?.id}'", null)
-        } catch (e: SQLiteException) {}
+        } catch (e: SQLiteException) {
+        }
     }
 }

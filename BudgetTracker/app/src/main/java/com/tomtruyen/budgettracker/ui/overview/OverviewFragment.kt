@@ -45,7 +45,7 @@ class OverviewFragment : Fragment() {
         val actionBar = (activity as AppCompatActivity?)?.supportActionBar
         actionBar?.setDisplayShowTitleEnabled(false)
         actionBar?.setDisplayShowCustomEnabled(true)
-        val customActionBar =  inflater.inflate(R.layout.overview_actionbar, container, false)
+        val customActionBar = inflater.inflate(R.layout.overview_actionbar, container, false)
         actionBar?.customView = customActionBar
 
         mAdapter = BudgetAdapter(context, customActionBar.findViewById(R.id.balanceText))

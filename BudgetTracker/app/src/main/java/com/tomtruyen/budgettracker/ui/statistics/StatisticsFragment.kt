@@ -1,42 +1,41 @@
 package com.tomtruyen.budgettracker.ui.statistics
 
 import android.annotation.SuppressLint
-import android.app.ActionBar
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.utils.ColorTemplate
-import com.tomtruyen.budgettracker.R
-import com.tomtruyen.budgettracker.databinding.FragmentStatisticsBinding
-import com.tomtruyen.budgettracker.services.DatabaseService
-import kotlin.math.abs
 import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.components.YAxis
-import com.github.mikephil.charting.data.*
-
-import com.github.mikephil.charting.formatter.IndexAxisValueFormatter
+import com.github.mikephil.charting.data.BarData
+import com.github.mikephil.charting.data.BarDataSet
+import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.github.mikephil.charting.renderer.XAxisRenderer
 import com.github.mikephil.charting.utils.MPPointF
 import com.github.mikephil.charting.utils.Transformer
 import com.github.mikephil.charting.utils.ViewPortHandler
-import com.tomtruyen.budgettracker.models.overview.BudgetAdapter
+import com.tomtruyen.budgettracker.R
+import com.tomtruyen.budgettracker.databinding.FragmentStatisticsBinding
 import com.tomtruyen.budgettracker.models.overview.Transaction
-import com.github.mikephil.charting.utils.Utils as ChartUtils
 import com.tomtruyen.budgettracker.models.statistics.ChartItem
 import com.tomtruyen.budgettracker.models.statistics.StatisticsAdapter
+import com.tomtruyen.budgettracker.services.DatabaseService
 import com.tomtruyen.budgettracker.utils.Utils
-import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.math.abs
+import com.github.mikephil.charting.utils.Utils as ChartUtils
 
 
 class StatisticsFragment : Fragment() {
@@ -140,7 +139,7 @@ class StatisticsFragment : Fragment() {
         var balance = 0.0
 
         mSelectedMonthTransactions.forEach {
-            if(it.isIncome) {
+            if (it.isIncome) {
                 balance += abs(it.price)
             } else {
                 balance -= abs(it.price)
@@ -188,13 +187,12 @@ class StatisticsFragment : Fragment() {
         barDataSet.setColors(colors, requireContext())
 
 
-
         val data = BarData(barDataSet)
         chart.data = data
 
         chart.xAxis.valueFormatter = BarFormatter()
         chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        chart.xAxis.isGranularityEnabled = true;
+        chart.xAxis.isGranularityEnabled = true
         chart.xAxis.granularity = 1f
         chart.xAxis.labelCount = categories.size
         chart.setXAxisRenderer(

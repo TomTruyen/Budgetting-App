@@ -14,8 +14,9 @@ import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.models.overview.Transaction
 import com.tomtruyen.budgettracker.utils.Utils
 
-class StatisticsAdapter(private val mContext: Context, var mTransactions: List<Transaction>) : RecyclerView.Adapter<StatisticsAdapter.ViewHolder>(){
-    private val mUtils : Utils = Utils()
+class StatisticsAdapter(private val mContext: Context, var mTransactions: List<Transaction>) :
+    RecyclerView.Adapter<StatisticsAdapter.ViewHolder>() {
+    private val mUtils: Utils = Utils()
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dateText: TextView = itemView.findViewById(R.id.date)
@@ -24,7 +25,10 @@ class StatisticsAdapter(private val mContext: Context, var mTransactions: List<T
         val imageView: ImageView = itemView.findViewById(R.id.image)
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): StatisticsAdapter.ViewHolder {
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): StatisticsAdapter.ViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
 
@@ -35,14 +39,15 @@ class StatisticsAdapter(private val mContext: Context, var mTransactions: List<T
 
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(viewHolder: StatisticsAdapter.ViewHolder, position: Int) {
-        val item : Transaction = mTransactions[position]
+        val item: Transaction = mTransactions[position]
 
         viewHolder.dateText.text = mUtils.toFormatString(item.date)
         viewHolder.titleText.text = item.title
         viewHolder.priceText.text = mUtils.toCurrencyString(item.price)
 
         if (item.isIncome) {
-            viewHolder.imageView.backgroundTintList = AppCompatResources.getColorStateList(mContext, R.color.green)
+            viewHolder.imageView.backgroundTintList =
+                AppCompatResources.getColorStateList(mContext, R.color.green)
 
             viewHolder.priceText.setTextColor(
                 ContextCompat.getColor(
@@ -57,31 +62,37 @@ class StatisticsAdapter(private val mContext: Context, var mTransactions: List<T
 
             when (item.category) {
                 "Home & Utilities" -> {
-                    viewHolder.imageView.backgroundTintList = AppCompatResources.getColorStateList(mContext, R.color.purple)
+                    viewHolder.imageView.backgroundTintList =
+                        AppCompatResources.getColorStateList(mContext, R.color.purple)
                     viewHolder.imageView.setImageResource(R.drawable.ic_home)
                 }
                 "Travel" -> {
-                    viewHolder.imageView.backgroundTintList = AppCompatResources.getColorStateList(mContext, R.color.blue)
+                    viewHolder.imageView.backgroundTintList =
+                        AppCompatResources.getColorStateList(mContext, R.color.blue)
                     viewHolder.imageView.setImageResource(R.drawable.ic_travel)
                 }
                 "Fitness & Health" -> {
-                    viewHolder.imageView.backgroundTintList = AppCompatResources.getColorStateList(mContext, R.color.red)
+                    viewHolder.imageView.backgroundTintList =
+                        AppCompatResources.getColorStateList(mContext, R.color.red)
                     viewHolder.imageView.rotation = 315f
                     viewHolder.imageView.setImageResource(R.drawable.ic_health)
                 }
                 "Food & Drinks" -> {
-                    viewHolder.imageView.backgroundTintList = AppCompatResources.getColorStateList(mContext, R.color.pink)
+                    viewHolder.imageView.backgroundTintList =
+                        AppCompatResources.getColorStateList(mContext, R.color.pink)
                     viewHolder.imageView.setImageResource(R.drawable.ic_food)
                 }
                 "Investment" -> {
-                    viewHolder.imageView.backgroundTintList = AppCompatResources.getColorStateList(mContext, R.color.yellow)
+                    viewHolder.imageView.backgroundTintList =
+                        AppCompatResources.getColorStateList(mContext, R.color.yellow)
                     viewHolder.imageView.setImageResource(R.drawable.ic_investment)
                 }
                 else -> {
                     val scale = mContext.resources.displayMetrics.density
                     val padding = Utils().densityToPixels(12, scale)
 
-                    viewHolder.imageView.backgroundTintList = AppCompatResources.getColorStateList(mContext, R.color.grey)
+                    viewHolder.imageView.backgroundTintList =
+                        AppCompatResources.getColorStateList(mContext, R.color.grey)
                     viewHolder.imageView.setPadding(padding, padding, padding, padding)
                     viewHolder.imageView.setImageResource(R.drawable.ic_other)
                 }
