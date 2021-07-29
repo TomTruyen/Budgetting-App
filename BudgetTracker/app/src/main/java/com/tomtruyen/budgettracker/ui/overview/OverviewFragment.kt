@@ -94,24 +94,4 @@ class OverviewFragment : Fragment() {
         intent.putExtra("isIncome", isIncome)
         mTransactionResultLauncher.launch(intent)
     }
-
-
-//    private fun updateBalance() {
-//        var balance = 0.0
-//        mAdapter.databaseService.read().forEach {
-//            if(it.isIncome) {
-//                balance += it.price
-//            } else {
-//                balance -= it.price
-//            }
-//        }
-//
-//        binding.balanceText.text = mUtils.toCurrencyString(balance)
-//
-//        if (balance >= 0) {
-//            binding.balanceText.setTextColor(ContextCompat.getColor(requireContext(), R.color.green))
-//        } else {
-//            binding.balanceText.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
-//        }
-//    }
 }

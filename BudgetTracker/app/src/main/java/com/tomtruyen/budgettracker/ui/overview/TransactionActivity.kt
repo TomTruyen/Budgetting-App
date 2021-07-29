@@ -33,9 +33,17 @@ class TransactionActivity : AppCompatActivity() {
 
         // Setup Dropdown
         spinner = findViewById(R.id.categorySpinner)
-        val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(this, R.array.categories_array, android.R.layout.simple_spinner_item)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+        if(isIncome) {
+            spinner.visibility = View.GONE
+        } else {
+            val adapter: ArrayAdapter<CharSequence> = ArrayAdapter.createFromResource(
+                this,
+                R.array.categories_array,
+                android.R.layout.simple_spinner_item
+            )
+            adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = adapter
+        }
 
         // Set onClickListener
         findViewById<FloatingActionButton>(R.id.submitButton).setOnClickListener { saveTransaction() }
@@ -45,7 +53,7 @@ class TransactionActivity : AppCompatActivity() {
         if(isValid()) {
             val label = findViewById<TextInputLayout>(R.id.titleInputLayout).editText?.text.toString()
             val amount = findViewById<TextInputLayout>(R.id.priceInputLayout).editText?.text.toString().toDouble()
-            val category = spinner.selectedItem.toString()
+            val category = if(isIncome) "" else spinner.selectedItem.toString()
 
             val transaction = Transaction(-1, Date(), label, category, amount, isIncome)
 
