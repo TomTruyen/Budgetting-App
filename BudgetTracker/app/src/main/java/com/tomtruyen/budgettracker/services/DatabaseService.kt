@@ -110,4 +110,13 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(context, context?.ge
             }
         } catch (e: SQLiteException) {}
     }
+
+    fun delete(position: Int) {
+        try {
+            val db = this.writableDatabase
+            val transaction = readOne(position)
+
+            db.delete(TABLE_TRANSACTIONS, "id='${transaction?.id}'", null)
+        } catch (e: SQLiteException) {}
+    }
 }

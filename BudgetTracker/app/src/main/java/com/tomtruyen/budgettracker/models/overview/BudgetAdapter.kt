@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.services.DatabaseService
 import com.tomtruyen.budgettracker.utils.Utils
+import java.lang.IndexOutOfBoundsException
 
-class BudgetAdapter(private val mContext: Context?) : RecyclerView.Adapter<BudgetAdapter.ViewHolder>(){
+class BudgetAdapter(private val mContext: Context?, private val mBalanceTextView: TextView) : RecyclerView.Adapter<BudgetAdapter.ViewHolder>(){
     private val mUtils : Utils = Utils()
     val databaseService : DatabaseService = DatabaseService(mContext)
 
@@ -56,5 +57,33 @@ class BudgetAdapter(private val mContext: Context?) : RecyclerView.Adapter<Budge
 
     override fun getItemCount(): Int {
         return databaseService.length()
+    }
+
+    fun delete(position: Int) {
+        databaseService.delete(position)
+        notifyItemRemoved(position)
+
+        updateBalance()
+    }
+
+    fun updateBalance() {
+        var balance = 0.0
+        databaseService.read().forEach {
+            if(it.isIncome) {
+                balance += it.price
+            } else {
+                balance -= it.price
+            }
+        }
+
+        mBalanceTextView.text = mUtils.toCurrencyString(balance)
+
+        if(mContext != null) {
+            if (balance >= 0) {
+                mBalanceTextView.setTextColor(ContextCompat.getColor(mContext, R.color.green))
+            } else {
+                mBalanceTextView.setTextColor(ContextCompat.getColor(mContext, R.color.red))
+            }
+        }
     }
 }
