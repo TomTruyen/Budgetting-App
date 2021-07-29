@@ -1,5 +1,7 @@
 package com.tomtruyen.budgettracker.ui.statistics
 
+import android.annotation.SuppressLint
+import android.app.ActionBar
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -7,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import android.widget.LinearLayout
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -109,6 +112,7 @@ class StatisticsFragment : Fragment() {
         _binding = null
     }
 
+    @SuppressLint("NotifyDataSetChanged")
     private fun updateMonthTransactions() {
         val transactions = mDatabaseService.read()
 
@@ -116,8 +120,14 @@ class StatisticsFragment : Fragment() {
             it.date.month == mSelectedMonthPosition
         }
 
+        if(mSelectedMonthTransactions.isEmpty()) {
+            binding.recyclerView.visibility = View.GONE
+        } else {
+            binding.recyclerView.visibility = View.VISIBLE
+        }
+
         mStatisticsAdapter.mTransactions = mSelectedMonthTransactions
-        mStatisticsAdapter.notifyItemRangeChanged(0, mSelectedMonthTransactions.size - 1)
+        mStatisticsAdapter.notifyDataSetChanged()
     }
 
     private fun updateChart() {
@@ -134,36 +144,50 @@ class StatisticsFragment : Fragment() {
         }
 
         val entries: ArrayList<BarEntry> = ArrayList()
+        var isPopulated = false
         for(i in mChartItems.indices) {
+            if(!isPopulated && mChartItems[i].value > 0) isPopulated = true
             entries.add(BarEntry(i.toFloat(), mChartItems[i].value.toFloat()))
         }
 
-        val barDataSet = BarDataSet(entries, "")
-        barDataSet.valueTextSize = 12f
-        barDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
-        barDataSet.valueFormatter = BarFormatter()
 
-        val data = BarData(barDataSet)
-        chart.data = data
+            val barDataSet = BarDataSet(entries, "")
+            barDataSet.valueTextSize = 12f
+            barDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
+            barDataSet.valueFormatter = BarFormatter()
 
-        chart.xAxis.valueFormatter = BarFormatter()
-        chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-        chart.xAxis.isGranularityEnabled = true;
-        chart.xAxis.granularity = 1f
-        chart.xAxis.labelCount = categories.size
-        chart.setXAxisRenderer(CustomXAxisRenderer(chart.viewPortHandler, chart.xAxis, chart.getTransformer(YAxis.AxisDependency.LEFT)))
-        chart.xAxis.setDrawGridLines(false)
+            val data = BarData(barDataSet)
+            chart.data = data
 
-        chart.axisLeft.axisMinimum = 0f
-        chart.axisLeft.isEnabled = false
-        chart.axisRight.isEnabled = false
+            chart.xAxis.valueFormatter = BarFormatter()
+            chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+            chart.xAxis.isGranularityEnabled = true;
+            chart.xAxis.granularity = 1f
+            chart.xAxis.labelCount = categories.size
+            chart.setXAxisRenderer(
+                CustomXAxisRenderer(
+                    chart.viewPortHandler,
+                    chart.xAxis,
+                    chart.getTransformer(YAxis.AxisDependency.LEFT)
+                )
+            )
+            chart.xAxis.setDrawGridLines(false)
 
-        chart.legend.isEnabled = false
-        chart.description.isEnabled = false
+            chart.axisLeft.axisMinimum = 0f
+            chart.axisLeft.isEnabled = false
+            chart.axisRight.isEnabled = false
 
-        chart.extraBottomOffset = 25f
+            chart.legend.isEnabled = false
+            chart.description.isEnabled = false
 
-        chart.invalidate()
+            chart.extraBottomOffset = 25f
+
+        if(!isPopulated) {
+            chart.data = null
+            chart.setNoDataText("No expenses found this month.")
+            chart.setNoDataTextColor(R.color.red)
+        }
+            chart.invalidate()
     }
 
     inner class BarFormatter : ValueFormatter() {
