@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.overview.TransactionActivity"
+    android:orientation="vertical"
+    android:layout_margin="8dp"
+        >
+
+<!--    Requirements -->
+<!--    Price-->
+<!--    Set Custom date (if needed) -->
+<!--    Categorie + Button to add a custom category (which will be saved on the system) -->
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/titleInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Label"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:boxStrokeColor="@color/primary"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="12dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/priceInputLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Amount"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        app:boxStrokeColor="@color/primary"
+        >
+        <com.google.android.material.textfield.TextInputEditText
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:inputType="numberDecimal"
+        />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="12dp" />
+
+    <Spinner
+        android:id="@+id/categorySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+        android:popupElevation="3dp"
+        android:background="@drawable/spinner_border"
+    />
+
+    <Space
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/submitButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end|bottom"
+        android:src="@drawable/ic_check"
+        android:contentDescription="Submit"
+        app:tint="@color/white"
+        android:layout_margin="8dp"
+    />
+
+
+
+
+
+</LinearLayout>

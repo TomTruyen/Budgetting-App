@@ -1,9 +1,13 @@
 package com.tomtruyen.budgettracker.ui.overview
 
+import android.app.Activity
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.result.ActivityResultLauncher
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -23,6 +27,8 @@ class OverviewFragment : Fragment() {
     private val mUtils : Utils = Utils()
     private lateinit var mAdapter: BudgetAdapter
 
+    private lateinit var mTransactionResultLauncher: ActivityResultLauncher<Intent>
+
     // This property is only valid between onCreateView and
     // onDestroyView.
     private val binding get() = _binding!!
@@ -41,11 +47,20 @@ class OverviewFragment : Fragment() {
         recyclerView.itemAnimator = SlideInRightAnimator()
 
         binding.incomeBtn.setOnClickListener {
-            addTransaction(Transaction(-1, Date(), "Test Income", 25.0, true))
+            openTransactionPage(true)
         }
 
         binding.expenseBtn.setOnClickListener {
-            addTransaction(Transaction(-1, Date(), "Test Income", 25.0, false))
+            openTransactionPage(false)
+        }
+
+        mTransactionResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+            if (it.resultCode == Activity.RESULT_OK) {
+                mAdapter.notifyItemInserted(0)
+                binding.recyclerView.scrollToPosition(0)
+
+                updateBalance()
+            }
         }
 
         updateBalance()
@@ -57,6 +72,13 @@ class OverviewFragment : Fragment() {
         super.onDestroyView()
         _binding = null
     }
+
+    private fun openTransactionPage(isIncome: Boolean) {
+        val intent = Intent(activity, TransactionActivity::class.java)
+        intent.putExtra("isIncome", isIncome)
+        mTransactionResultLauncher.launch(intent)
+    }
+
 
     private fun updateBalance() {
         var balance = 0.0
@@ -75,14 +97,5 @@ class OverviewFragment : Fragment() {
         } else {
             binding.balanceText.setTextColor(ContextCompat.getColor(requireContext(), R.color.red))
         }
-    }
-
-    private fun addTransaction(item: Transaction) {
-        mAdapter.databaseService.save(item)
-
-        mAdapter.notifyItemInserted(0)
-        binding.recyclerView.scrollToPosition(0)
-
-        updateBalance()
     }
 }
