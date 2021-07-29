@@ -135,6 +135,7 @@ class StatisticsFragment : Fragment() {
         mStatisticsAdapter.notifyDataSetChanged()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun updateBalance() {
         var balance = 0.0
 
