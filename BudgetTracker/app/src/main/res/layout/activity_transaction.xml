@@ -9,10 +9,6 @@
     android:layout_margin="8dp"
         >
 
-<!--    Requirements -->
-<!--    Price-->
-<!--    Set Custom date (if needed) -->
-<!--    Categorie + Button to add a custom category (which will be saved on the system) -->
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/titleInputLayout"
         android:layout_width="match_parent"

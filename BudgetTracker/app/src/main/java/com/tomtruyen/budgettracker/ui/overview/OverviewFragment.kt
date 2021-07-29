@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
@@ -46,6 +47,10 @@ class OverviewFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentOverviewBinding.inflate(inflater, container, false)
+
+        val actionBar = (activity as AppCompatActivity?)?.supportActionBar
+        actionBar?.setDisplayShowTitleEnabled(true)
+        actionBar?.setDisplayShowCustomEnabled(false)
 
         val balanceTextView = binding.balanceText
         mAdapter = BudgetAdapter(context, balanceTextView)

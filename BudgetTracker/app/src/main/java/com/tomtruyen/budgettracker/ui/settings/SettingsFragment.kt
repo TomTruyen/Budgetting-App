@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.tomtruyen.budgettracker.databinding.FragmentSettingsBinding
@@ -27,6 +28,12 @@ class SettingsFragment : Fragment() {
             ViewModelProvider(this).get(SettingsViewModel::class.java)
 
         _binding = FragmentSettingsBinding.inflate(inflater, container, false)
+
+        val actionBar = (activity as AppCompatActivity?)?.supportActionBar
+        actionBar?.setDisplayShowTitleEnabled(true)
+        actionBar?.setDisplayShowCustomEnabled(false)
+
+
         val root: View = binding.root
 
         val textView: TextView = binding.textSettings
