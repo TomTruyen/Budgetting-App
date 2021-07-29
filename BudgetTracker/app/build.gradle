@@ -57,5 +57,8 @@ dependencies {
     implementation 'jp.wasabeef:recyclerview-animators:4.0.2'
 
     // Gson
-    implementation("com.google.code.gson:gson:2.8.6")
+    implementation "com.google.code.gson:gson:2.8.6"
+
+    // Charts
+    implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
 }
