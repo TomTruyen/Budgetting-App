@@ -35,6 +35,8 @@ import com.tomtruyen.budgettracker.models.statistics.ChartItem
 import com.tomtruyen.budgettracker.models.statistics.StatisticsAdapter
 import com.tomtruyen.budgettracker.utils.Utils
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class StatisticsFragment : Fragment() {
@@ -43,7 +45,7 @@ class StatisticsFragment : Fragment() {
     private lateinit var mAdapter: ArrayAdapter<CharSequence>
     private lateinit var mStatisticsAdapter: StatisticsAdapter
     private lateinit var mDatabaseService : DatabaseService
-    private var mSelectedMonthPosition: Int = 0
+    private var mSelectedMonthPosition: Int = Date().month
     private var mSelectedMonthTransactions: List<Transaction> = ArrayList()
     private var mChartItems : ArrayList<ChartItem> = ArrayList()
     private val mUtils : Utils = Utils()
@@ -74,6 +76,7 @@ class StatisticsFragment : Fragment() {
         )
         mAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = mAdapter
+        spinner.setSelection(mSelectedMonthPosition)
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(
                 parentView: AdapterView<*>?,
