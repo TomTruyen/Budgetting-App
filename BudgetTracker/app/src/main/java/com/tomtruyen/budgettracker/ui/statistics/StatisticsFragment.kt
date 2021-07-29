@@ -47,11 +47,11 @@ class StatisticsFragment : Fragment() {
     private var _binding: FragmentStatisticsBinding? = null
     private lateinit var mAdapter: ArrayAdapter<CharSequence>
     private lateinit var mStatisticsAdapter: StatisticsAdapter
-    private lateinit var mDatabaseService : DatabaseService
+    private lateinit var mDatabaseService: DatabaseService
     private var mSelectedMonthPosition: Int = Date().month
     private var mSelectedMonthTransactions: List<Transaction> = ArrayList()
-    private var mChartItems : ArrayList<ChartItem> = ArrayList()
-    private val mUtils : Utils = Utils()
+    private var mChartItems: ArrayList<ChartItem> = ArrayList()
+    private val mUtils: Utils = Utils()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -71,7 +71,8 @@ class StatisticsFragment : Fragment() {
         mDatabaseService = DatabaseService(requireContext())
 
         // Setup Spinner (Dropdown)
-        val spinner : Spinner = inflater.inflate(R.layout.month_dropdown, container, false) as Spinner
+        val spinner: Spinner =
+            inflater.inflate(R.layout.month_dropdown, container, false) as Spinner
         mAdapter = ArrayAdapter.createFromResource(
             requireContext(),
             R.array.month_array,
@@ -120,7 +121,7 @@ class StatisticsFragment : Fragment() {
             it.date.month == mSelectedMonthPosition
         }
 
-        if(mSelectedMonthTransactions.isEmpty()) {
+        if (mSelectedMonthTransactions.isEmpty()) {
             binding.recyclerView.visibility = View.GONE
         } else {
             binding.recyclerView.visibility = View.VISIBLE
@@ -133,10 +134,12 @@ class StatisticsFragment : Fragment() {
     private fun updateChart() {
         val chart = binding.barChart
 
+
         mChartItems = ArrayList()
         val categories = resources.getStringArray(R.array.categories_array)
         categories.forEach { category ->
-            val categoryTransactions = mSelectedMonthTransactions.filter { it.category.equals(category) && !it.isIncome}
+            val categoryTransactions =
+                mSelectedMonthTransactions.filter { it.category.equals(category) && !it.isIncome }
 
             val totalSpent = categoryTransactions.sumOf { abs(it.price) }
 
@@ -145,55 +148,66 @@ class StatisticsFragment : Fragment() {
 
         val entries: ArrayList<BarEntry> = ArrayList()
         var isPopulated = false
-        for(i in mChartItems.indices) {
-            if(!isPopulated && mChartItems[i].value > 0) isPopulated = true
+        for (i in mChartItems.indices) {
+            if (!isPopulated && mChartItems[i].value > 0) isPopulated = true
             entries.add(BarEntry(i.toFloat(), mChartItems[i].value.toFloat()))
         }
 
+        val barDataSet = BarDataSet(entries, "")
+        barDataSet.valueTextSize = 12f
+        barDataSet.valueFormatter = BarFormatter()
 
-            val barDataSet = BarDataSet(entries, "")
-            barDataSet.valueTextSize = 12f
-            barDataSet.setColors(*ColorTemplate.COLORFUL_COLORS)
-            barDataSet.valueFormatter = BarFormatter()
 
-            val data = BarData(barDataSet)
-            chart.data = data
+        val colors = intArrayOf(
+            R.color.purple,
+            R.color.blue,
+            R.color.red,
+            R.color.pink,
+            R.color.yellow,
+            R.color.grey
+        )
+        barDataSet.setColors(colors, requireContext())
 
-            chart.xAxis.valueFormatter = BarFormatter()
-            chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
-            chart.xAxis.isGranularityEnabled = true;
-            chart.xAxis.granularity = 1f
-            chart.xAxis.labelCount = categories.size
-            chart.setXAxisRenderer(
-                CustomXAxisRenderer(
-                    chart.viewPortHandler,
-                    chart.xAxis,
-                    chart.getTransformer(YAxis.AxisDependency.LEFT)
-                )
+
+
+        val data = BarData(barDataSet)
+        chart.data = data
+
+        chart.xAxis.valueFormatter = BarFormatter()
+        chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
+        chart.xAxis.isGranularityEnabled = true;
+        chart.xAxis.granularity = 1f
+        chart.xAxis.labelCount = categories.size
+        chart.setXAxisRenderer(
+            CustomXAxisRenderer(
+                chart.viewPortHandler,
+                chart.xAxis,
+                chart.getTransformer(YAxis.AxisDependency.LEFT)
             )
-            chart.xAxis.setDrawGridLines(false)
+        )
+        chart.xAxis.setDrawGridLines(false)
 
-            chart.axisLeft.axisMinimum = 0f
-            chart.axisLeft.isEnabled = false
-            chart.axisRight.isEnabled = false
+        chart.axisLeft.axisMinimum = 0f
+        chart.axisLeft.isEnabled = false
+        chart.axisRight.isEnabled = false
 
-            chart.legend.isEnabled = false
-            chart.description.isEnabled = false
+        chart.legend.isEnabled = false
+        chart.description.isEnabled = false
 
-            chart.extraBottomOffset = 25f
+        chart.extraBottomOffset = 25f
 
-        if(!isPopulated) {
+        if (!isPopulated) {
             chart.data = null
             chart.setNoDataText("No expenses found this month.")
             chart.setNoDataTextColor(R.color.red)
         }
-            chart.invalidate()
+        chart.invalidate()
     }
 
     inner class BarFormatter : ValueFormatter() {
 
         override fun getFormattedValue(value: Float): String {
-            if(value == 0f) return ""
+            if (value == 0f) return ""
 
             return mUtils.toCurrencyString(value.toDouble())
         }
@@ -209,7 +223,11 @@ class StatisticsFragment : Fragment() {
         }
     }
 
-    inner class CustomXAxisRenderer(viewPortHandler: ViewPortHandler, xAxis: XAxis, trans: Transformer) : XAxisRenderer(viewPortHandler, xAxis, trans) {
+    inner class CustomXAxisRenderer(
+        viewPortHandler: ViewPortHandler,
+        xAxis: XAxis,
+        trans: Transformer
+    ) : XAxisRenderer(viewPortHandler, xAxis, trans) {
         override fun drawLabel(
             c: Canvas?,
             formattedLabel: String,
@@ -219,8 +237,16 @@ class StatisticsFragment : Fragment() {
             angleDegrees: Float
         ) {
             val line = formattedLabel.split("&").toTypedArray()
-            ChartUtils.drawXAxisValue(c, line[0].trim(), x, y, mAxisLabelPaint, anchor, angleDegrees)
-            if(line.size > 1) {
+            ChartUtils.drawXAxisValue(
+                c,
+                line[0].trim(),
+                x,
+                y,
+                mAxisLabelPaint,
+                anchor,
+                angleDegrees
+            )
+            if (line.size > 1) {
                 ChartUtils.drawXAxisValue(
                     c,
                     line[1].trim(),

@@ -8,12 +8,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ResourcesCompat
 import androidx.core.graphics.drawable.DrawableCompat
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.ItemTouchHelper
@@ -23,10 +21,7 @@ import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.databinding.FragmentOverviewBinding
 import com.tomtruyen.budgettracker.models.overview.BudgetAdapter
 import com.tomtruyen.budgettracker.models.overview.SwipeToDeleteCallback
-import com.tomtruyen.budgettracker.models.overview.Transaction
-import com.tomtruyen.budgettracker.utils.Utils
 import jp.wasabeef.recyclerview.animators.SlideInRightAnimator
-import java.util.*
 
 
 class OverviewFragment : Fragment() {
@@ -59,8 +54,11 @@ class OverviewFragment : Fragment() {
         recyclerView.itemAnimator = SlideInRightAnimator()
 
         // SwipeToDeleteCallback
-        val icon : Drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete)!!
-        DrawableCompat.setTint(DrawableCompat.wrap(icon), ContextCompat.getColor(requireContext(), R.color.white))
+        val icon: Drawable = ContextCompat.getDrawable(requireContext(), R.drawable.ic_delete)!!
+        DrawableCompat.setTint(
+            DrawableCompat.wrap(icon),
+            ContextCompat.getColor(requireContext(), R.color.white)
+        )
         val background = ColorDrawable(ContextCompat.getColor(requireContext(), R.color.red))
 
         val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(mAdapter, icon, background))
@@ -74,14 +72,15 @@ class OverviewFragment : Fragment() {
             openTransactionPage(false)
         }
 
-        mTransactionResultLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
-            if (it.resultCode == Activity.RESULT_OK) {
-                mAdapter.notifyItemInserted(0)
-                binding.recyclerView.scrollToPosition(0)
+        mTransactionResultLauncher =
+            registerForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+                if (it.resultCode == Activity.RESULT_OK) {
+                    mAdapter.notifyItemInserted(0)
+                    binding.recyclerView.scrollToPosition(0)
 
-                mAdapter.updateBalance()
+                    mAdapter.updateBalance()
+                }
             }
-        }
 
         mAdapter.updateBalance()
 
