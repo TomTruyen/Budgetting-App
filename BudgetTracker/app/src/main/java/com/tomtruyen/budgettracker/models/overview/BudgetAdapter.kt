@@ -118,13 +118,5 @@ class BudgetAdapter(private val mContext: Context?, private val mBalanceTextView
         }
 
         mBalanceTextView.text = mUtils.toCurrencyString(balance)
-
-        if(mContext != null) {
-            if (balance >= 0) {
-                mBalanceTextView.setTextColor(ContextCompat.getColor(mContext, R.color.green))
-            } else {
-                mBalanceTextView.setTextColor(ContextCompat.getColor(mContext, R.color.red))
-            }
-        }
     }
 }

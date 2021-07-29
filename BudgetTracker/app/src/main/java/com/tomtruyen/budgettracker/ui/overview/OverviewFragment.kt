@@ -43,11 +43,12 @@ class OverviewFragment : Fragment() {
         _binding = FragmentOverviewBinding.inflate(inflater, container, false)
 
         val actionBar = (activity as AppCompatActivity?)?.supportActionBar
-        actionBar?.setDisplayShowTitleEnabled(true)
-        actionBar?.setDisplayShowCustomEnabled(false)
+        actionBar?.setDisplayShowTitleEnabled(false)
+        actionBar?.setDisplayShowCustomEnabled(true)
+        val customActionBar =  inflater.inflate(R.layout.overview_actionbar, container, false)
+        actionBar?.customView = customActionBar
 
-        val balanceTextView = binding.balanceText
-        mAdapter = BudgetAdapter(context, balanceTextView)
+        mAdapter = BudgetAdapter(context, customActionBar.findViewById(R.id.balanceText))
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
