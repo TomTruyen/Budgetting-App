@@ -16,4 +16,8 @@ class Utils {
 
         return numberFormat.format(value)
     }
+
+    fun densityToPixels(dp: Int, scale: Float) : Int{
+        return (dp * scale + 0.5f).toInt()
+    }
 }
