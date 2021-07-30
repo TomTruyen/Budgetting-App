@@ -1,6 +1,7 @@
 package com.tomtruyen.budgettracker.ui.statistics
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Canvas
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -30,25 +31,30 @@ import com.tomtruyen.budgettracker.databinding.FragmentStatisticsBinding
 import com.tomtruyen.budgettracker.models.overview.Transaction
 import com.tomtruyen.budgettracker.models.settings.Settings
 import com.tomtruyen.budgettracker.models.statistics.ChartItem
-import com.tomtruyen.budgettracker.models.statistics.StatisticsAdapter
+import com.tomtruyen.budgettracker.models.statistics.StatisticsCategory
+import com.tomtruyen.budgettracker.models.statistics.StatisticsCategoryAdapter
 import com.tomtruyen.budgettracker.services.DatabaseService
 import com.tomtruyen.budgettracker.utils.Utils
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 import com.github.mikephil.charting.utils.Utils as ChartUtils
+import android.telecom.Call.Details
+
+
+
 
 
 class StatisticsFragment : Fragment() {
 
     private var _binding: FragmentStatisticsBinding? = null
     private lateinit var mAdapter: ArrayAdapter<CharSequence>
-    private lateinit var mStatisticsAdapter: StatisticsAdapter
+    private lateinit var mStatisticsCategoryAdapter: StatisticsCategoryAdapter
     private lateinit var mDatabaseService: DatabaseService
     private lateinit var mBalanceTextView: TextView
     private var mSelectedMonthPosition: Int = Date().month
-    private var mSelectedMonthTransactions: List<Transaction> = ArrayList()
-    private var mChartItems: ArrayList<ChartItem> = ArrayList()
+    private var mSelectedMonthTransactions : List<Transaction> = ArrayList()
+    private var mSelectedMonthCategories: ArrayList<StatisticsCategory> = ArrayList()
     private val mUtils: Utils = Utils()
     private var mSettings: Settings = Settings.default()
 
@@ -104,12 +110,18 @@ class StatisticsFragment : Fragment() {
         actionBar?.customView = spinnerLayout
 
         // Setup RecycleView
-        mStatisticsAdapter = StatisticsAdapter(requireContext(), mSelectedMonthTransactions, mSettings)
+        mStatisticsCategoryAdapter = StatisticsCategoryAdapter(requireContext(), mSelectedMonthCategories, mSettings, object : StatisticsCategoryAdapter.ItemClickListener {
+            override fun onItemClick(category: StatisticsCategory) {
+                val intent = Intent(requireContext(), StatisticsCategoryActivity::class.java)
+                intent.putExtra("category", category.title)
+                intent.putExtra("month", mSelectedMonthPosition)
+                startActivity(intent)
+            }
+        })
 
         val recyclerView: RecyclerView = binding.recyclerView
-        recyclerView.adapter = mStatisticsAdapter
+        recyclerView.adapter = mStatisticsCategoryAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
-
 
         return binding.root
     }
@@ -133,19 +145,39 @@ class StatisticsFragment : Fragment() {
             binding.recyclerView.visibility = View.VISIBLE
         }
 
-        mStatisticsAdapter.mTransactions = mSelectedMonthTransactions
-        mStatisticsAdapter.notifyDataSetChanged()
+        mSelectedMonthCategories = ArrayList()
+        val categories = resources.getStringArray(R.array.categories_array)
+        categories.forEach {
+            mSelectedMonthCategories.add(StatisticsCategory(it, 0.0))
+        }
+        mSelectedMonthCategories.add(StatisticsCategory("Income", 0.0))
+
+        mSelectedMonthTransactions.forEach { transaction ->
+            if(transaction.isIncome) {
+                mSelectedMonthCategories.last().total += abs(transaction.price)
+            } else {
+                mSelectedMonthCategories.forEach {
+                    if(it.title.lowercase() == transaction.category?.lowercase()) {
+                        it.total += abs(transaction.price)
+                    }
+                }
+            }
+        }
+
+
+        mStatisticsCategoryAdapter.mCategories = mSelectedMonthCategories
+        mStatisticsCategoryAdapter.notifyDataSetChanged()
     }
 
     @SuppressLint("SetTextI18n")
     private fun updateBalance() {
         var balance = 0.0
 
-        mSelectedMonthTransactions.forEach {
-            if (it.isIncome) {
-                balance += abs(it.price)
+        mSelectedMonthCategories.forEach {
+            if (it.title == "Income") {
+                balance += it.total
             } else {
-                balance -= abs(it.price)
+                balance -= it.total
             }
         }
 
@@ -156,22 +188,11 @@ class StatisticsFragment : Fragment() {
         val chart = binding.barChart
 
 
-        mChartItems = ArrayList()
-        val categories = resources.getStringArray(R.array.categories_array)
-        categories.forEach { category ->
-            val categoryTransactions =
-                mSelectedMonthTransactions.filter { it.category.equals(category) && !it.isIncome }
-
-            val totalSpent = categoryTransactions.sumOf { abs(it.price) }
-
-            mChartItems.add(ChartItem(category, totalSpent))
-        }
-
         val entries: ArrayList<BarEntry> = ArrayList()
         var isPopulated = false
-        for (i in mChartItems.indices) {
-            if (!isPopulated && mChartItems[i].value > 0) isPopulated = true
-            entries.add(BarEntry(i.toFloat(), mChartItems[i].value.toFloat()))
+        for (i in mSelectedMonthCategories.indices) {
+            if (!isPopulated && mSelectedMonthCategories[i].total > 0) isPopulated = true
+            entries.add(BarEntry(i.toFloat(), mSelectedMonthCategories[i].total.toFloat()))
         }
 
         val barDataSet = BarDataSet(entries, "")
@@ -185,7 +206,8 @@ class StatisticsFragment : Fragment() {
             R.color.red,
             R.color.pink,
             R.color.yellow,
-            R.color.grey
+            R.color.grey,
+            R.color.green,
         )
         barDataSet.setColors(colors, requireContext())
 
@@ -197,7 +219,7 @@ class StatisticsFragment : Fragment() {
         chart.xAxis.position = XAxis.XAxisPosition.BOTTOM
         chart.xAxis.isGranularityEnabled = true
         chart.xAxis.granularity = 1f
-        chart.xAxis.labelCount = categories.size
+        chart.xAxis.labelCount = mSelectedMonthCategories.size
         chart.setXAxisRenderer(
             CustomXAxisRenderer(
                 chart.viewPortHandler,
@@ -235,8 +257,8 @@ class StatisticsFragment : Fragment() {
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {
             val index = value.toInt()
 
-            return if (index < mChartItems.size) {
-                mChartItems[index].label
+            return if (index < mSelectedMonthCategories.size) {
+                mSelectedMonthCategories[index].title
             } else {
                 ""
             }

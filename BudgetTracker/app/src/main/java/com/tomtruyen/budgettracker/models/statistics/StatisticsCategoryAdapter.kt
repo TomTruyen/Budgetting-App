@@ -11,17 +11,17 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.R
-import com.tomtruyen.budgettracker.models.overview.Transaction
 import com.tomtruyen.budgettracker.models.settings.Settings
 import com.tomtruyen.budgettracker.utils.Utils
 
-class StatisticsAdapter(private val mContext: Context, var mTransactions: List<Transaction>, private val mSettings: Settings) :
-    RecyclerView.Adapter<StatisticsAdapter.ViewHolder>() {
+class StatisticsCategoryAdapter(private val mContext: Context, var mCategories : List<StatisticsCategory>, private val mSettings: Settings, private val mItemListener: ItemClickListener) : RecyclerView.Adapter<StatisticsCategoryAdapter.ViewHolder>() {
     private val mUtils: Utils = Utils()
 
+    interface ItemClickListener {
+        fun onItemClick(category: StatisticsCategory)
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val dateText: TextView = itemView.findViewById(R.id.date)
         val titleText: TextView = itemView.findViewById(R.id.title)
         val priceText: TextView = itemView.findViewById(R.id.price)
         val imageView: ImageView = itemView.findViewById(R.id.image)
@@ -30,39 +30,35 @@ class StatisticsAdapter(private val mContext: Context, var mTransactions: List<T
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): StatisticsAdapter.ViewHolder {
+    ): StatisticsCategoryAdapter.ViewHolder {
         val context = parent.context
         val inflater = LayoutInflater.from(context)
 
-        val listItem = inflater.inflate(R.layout.fragment_overview_list_item, parent, false)
+        val listItem = inflater.inflate(R.layout.fragment_statistics_category_list_item, parent, false)
 
         return ViewHolder(listItem)
     }
 
     @SuppressLint("SetTextI18n")
-    override fun onBindViewHolder(viewHolder: StatisticsAdapter.ViewHolder, position: Int) {
-        val item: Transaction = mTransactions[position]
+    override fun onBindViewHolder(viewHolder: StatisticsCategoryAdapter.ViewHolder, position: Int) {
+        val category: StatisticsCategory = mCategories[position]
 
-        viewHolder.dateText.text = mUtils.toFormatString(item.date)
-        viewHolder.titleText.text = item.title
-        viewHolder.priceText.text = mUtils.toCurrencyString(item.price, mSettings.currencyLocale)
+        viewHolder.titleText.text = category.title
+        viewHolder.priceText.text = mUtils.toCurrencyString(category.total, mSettings.currencyLocale)
 
-        if (item.isIncome) {
+        viewHolder.itemView.setOnClickListener {
+            mItemListener.onItemClick(mCategories[position])
+        }
+
+        if(category.title == "Income") {
+            viewHolder.priceText.setTextColor(ContextCompat.getColor(mContext, R.color.green))
             viewHolder.imageView.backgroundTintList =
                 AppCompatResources.getColorStateList(mContext, R.color.green)
-
-            viewHolder.priceText.setTextColor(
-                ContextCompat.getColor(
-                    mContext,
-                    R.color.green
-                )
-            )
-
             viewHolder.imageView.setImageResource(R.drawable.ic_money)
         } else {
             viewHolder.priceText.setTextColor(ContextCompat.getColor(mContext, R.color.red))
 
-            when (item.category) {
+            when (category.title) {
                 "Home & Utilities" -> {
                     viewHolder.imageView.backgroundTintList =
                         AppCompatResources.getColorStateList(mContext, R.color.purple)
@@ -100,10 +96,10 @@ class StatisticsAdapter(private val mContext: Context, var mTransactions: List<T
                 }
             }
         }
+
     }
 
     override fun getItemCount(): Int {
-        return mTransactions.size
+        return mCategories.size
     }
 }
-
