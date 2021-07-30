@@ -30,7 +30,6 @@ import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.databinding.FragmentStatisticsBinding
 import com.tomtruyen.budgettracker.models.overview.Transaction
 import com.tomtruyen.budgettracker.models.settings.Settings
-import com.tomtruyen.budgettracker.models.statistics.ChartItem
 import com.tomtruyen.budgettracker.models.statistics.StatisticsCategory
 import com.tomtruyen.budgettracker.models.statistics.StatisticsCategoryAdapter
 import com.tomtruyen.budgettracker.services.DatabaseService
@@ -39,10 +38,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.math.abs
 import com.github.mikephil.charting.utils.Utils as ChartUtils
-import android.telecom.Call.Details
-
-
-
 
 
 class StatisticsFragment : Fragment() {
@@ -116,6 +111,7 @@ class StatisticsFragment : Fragment() {
                 intent.putExtra("category", category.title)
                 intent.putExtra("month", mSelectedMonthPosition)
                 startActivity(intent)
+                activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
             }
         })
 

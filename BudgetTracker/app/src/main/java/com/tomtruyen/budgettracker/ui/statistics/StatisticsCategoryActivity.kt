@@ -11,7 +11,6 @@ import com.tomtruyen.budgettracker.models.statistics.StatisticsAdapter
 import com.tomtruyen.budgettracker.services.DatabaseService
 import java.util.*
 import kotlin.collections.ArrayList
-import android.app.Activity
 import android.view.MenuItem
 
 
@@ -52,6 +51,7 @@ class StatisticsCategoryActivity : AppCompatActivity() {
         if (item.itemId == android.R.id.home) {
             setResult(RESULT_CANCELED)
             finish()
+            overridePendingTransition(R.anim.enter_child, R.anim.exit_child)
         }
         return super.onOptionsItemSelected(item)
     }
