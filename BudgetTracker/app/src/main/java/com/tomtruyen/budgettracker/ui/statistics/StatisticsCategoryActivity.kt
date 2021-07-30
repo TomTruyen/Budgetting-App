@@ -66,6 +66,11 @@ class StatisticsCategoryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
+    override fun onBackPressed() {
+        super.onBackPressed()
+        overridePendingTransition(R.anim.enter_child, R.anim.exit_child)
+    }
+
     private fun getTransactions(category: String?, month: Int): List<Transaction> {
         if (category == null) {
             return ArrayList()
