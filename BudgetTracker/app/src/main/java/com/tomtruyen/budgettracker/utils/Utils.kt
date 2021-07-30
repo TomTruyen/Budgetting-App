@@ -3,6 +3,7 @@ package com.tomtruyen.budgettracker.utils
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.collections.ArrayList
 
 class Utils {
     fun toFormatString(date: Date): String {
@@ -11,10 +12,24 @@ class Utils {
         return formatter.format(date)
     }
 
-    fun toCurrencyString(value: Double): String {
-        val numberFormat = NumberFormat.getCurrencyInstance(Locale.US)
+    fun toCurrencyString(value: Double, locale: Locale = Locale.US): String {
+        val numberFormat = NumberFormat.getCurrencyInstance(locale)
 
         return numberFormat.format(value)
+    }
+
+    fun toCurrencyDisplayNames(locales: List<Locale>) : List<String> {
+        val displayNames = ArrayList<String>()
+
+        locales.forEach {
+            val currency = NumberFormat.getCurrencyInstance(it).currency
+
+            if(currency != null) {
+                displayNames.add("${currency.displayName} (${currency.symbol})")
+            }
+        }
+
+        return displayNames
     }
 
     fun densityToPixels(dp: Int, scale: Float): Int {

@@ -11,6 +11,7 @@ import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.R
+import com.tomtruyen.budgettracker.models.settings.Settings
 import com.tomtruyen.budgettracker.services.DatabaseService
 import com.tomtruyen.budgettracker.utils.Utils
 
@@ -18,6 +19,11 @@ class BudgetAdapter(private val mContext: Context?, private val mBalanceTextView
     RecyclerView.Adapter<BudgetAdapter.ViewHolder>() {
     private val mUtils: Utils = Utils()
     private val databaseService: DatabaseService = DatabaseService(mContext)
+    private var mSettings = Settings.default()
+
+    init {
+        mSettings = databaseService.readSettings()
+    }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dateText: TextView = itemView.findViewById(R.id.date)
@@ -40,9 +46,11 @@ class BudgetAdapter(private val mContext: Context?, private val mBalanceTextView
         val item: Transaction? = databaseService.readOne(position)
 
         if (item != null) {
+
+
             viewHolder.dateText.text = mUtils.toFormatString(item.date)
             viewHolder.titleText.text = item.title
-            viewHolder.priceText.text = mUtils.toCurrencyString(item.price)
+            viewHolder.priceText.text = mUtils.toCurrencyString(item.price, mSettings.currencyLocale)
 
             if (mContext != null) {
                 viewHolder.imageView.backgroundTintList =
@@ -123,6 +131,6 @@ class BudgetAdapter(private val mContext: Context?, private val mBalanceTextView
             }
         }
 
-        mBalanceTextView.text = mUtils.toCurrencyString(balance)
+        mBalanceTextView.text = mUtils.toCurrencyString(balance, mSettings.currencyLocale)
     }
 }

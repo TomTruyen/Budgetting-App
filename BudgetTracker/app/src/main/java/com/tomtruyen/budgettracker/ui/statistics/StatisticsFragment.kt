@@ -28,6 +28,7 @@ import com.github.mikephil.charting.utils.ViewPortHandler
 import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.databinding.FragmentStatisticsBinding
 import com.tomtruyen.budgettracker.models.overview.Transaction
+import com.tomtruyen.budgettracker.models.settings.Settings
 import com.tomtruyen.budgettracker.models.statistics.ChartItem
 import com.tomtruyen.budgettracker.models.statistics.StatisticsAdapter
 import com.tomtruyen.budgettracker.services.DatabaseService
@@ -49,6 +50,7 @@ class StatisticsFragment : Fragment() {
     private var mSelectedMonthTransactions: List<Transaction> = ArrayList()
     private var mChartItems: ArrayList<ChartItem> = ArrayList()
     private val mUtils: Utils = Utils()
+    private var mSettings: Settings = Settings.default()
 
     // This property is only valid between onCreateView and
     // onDestroyView.
@@ -66,6 +68,7 @@ class StatisticsFragment : Fragment() {
         actionBar?.setDisplayShowCustomEnabled(true)
 
         mDatabaseService = DatabaseService(requireContext())
+        mSettings = mDatabaseService.readSettings()
 
         // Setup Spinner (Dropdown)
         val spinnerLayout =
@@ -101,7 +104,7 @@ class StatisticsFragment : Fragment() {
         actionBar?.customView = spinnerLayout
 
         // Setup RecycleView
-        mStatisticsAdapter = StatisticsAdapter(requireContext(), mSelectedMonthTransactions)
+        mStatisticsAdapter = StatisticsAdapter(requireContext(), mSelectedMonthTransactions, mSettings)
 
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = mStatisticsAdapter
@@ -146,7 +149,7 @@ class StatisticsFragment : Fragment() {
             }
         }
 
-        mBalanceTextView.text = mUtils.toCurrencyString(balance)
+        mBalanceTextView.text = mUtils.toCurrencyString(balance, mSettings.currencyLocale)
     }
 
     private fun updateChart() {
@@ -226,7 +229,7 @@ class StatisticsFragment : Fragment() {
         override fun getFormattedValue(value: Float): String {
             if (value == 0f) return ""
 
-            return mUtils.toCurrencyString(value.toDouble())
+            return mUtils.toCurrencyString(value.toDouble(), mSettings.currencyLocale)
         }
 
         override fun getAxisLabel(value: Float, axis: AxisBase?): String {

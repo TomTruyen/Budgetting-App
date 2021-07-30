@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/dialog_bg"
+    >
+
+    <Spinner
+        android:id="@+id/spinner"
+        android:layout_width="match_parent"
+        android:layout_height="56dp"
+        android:dropDownVerticalOffset="?attr/dropdownListPreferredItemHeight"
+        android:popupElevation="3dp"
+        android:background="@drawable/spinner_border"
+        android:layout_gravity="center"
+        />
+
+
+    <Button
+        android:id="@+id/submitButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:text="@string/ok"
+        android:textColor="@color/white"
+        android:layout_below="@id/spinner"
+        />
+
+</RelativeLayout>

@@ -12,11 +12,13 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.models.overview.Transaction
+import com.tomtruyen.budgettracker.models.settings.Settings
 import com.tomtruyen.budgettracker.utils.Utils
 
-class StatisticsAdapter(private val mContext: Context, var mTransactions: List<Transaction>) :
+class StatisticsAdapter(private val mContext: Context, var mTransactions: List<Transaction>, val mSettings: Settings) :
     RecyclerView.Adapter<StatisticsAdapter.ViewHolder>() {
     private val mUtils: Utils = Utils()
+
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val dateText: TextView = itemView.findViewById(R.id.date)
@@ -43,7 +45,7 @@ class StatisticsAdapter(private val mContext: Context, var mTransactions: List<T
 
         viewHolder.dateText.text = mUtils.toFormatString(item.date)
         viewHolder.titleText.text = item.title
-        viewHolder.priceText.text = mUtils.toCurrencyString(item.price)
+        viewHolder.priceText.text = mUtils.toCurrencyString(item.price, mSettings.currencyLocale)
 
         if (item.isIncome) {
             viewHolder.imageView.backgroundTintList =

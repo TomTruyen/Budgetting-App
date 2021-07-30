@@ -9,6 +9,9 @@ import android.database.sqlite.SQLiteOpenHelper
 import com.google.gson.Gson
 import com.google.gson.JsonSyntaxException
 import com.tomtruyen.budgettracker.models.overview.Transaction
+import com.tomtruyen.budgettracker.models.settings.Settings
+import java.util.*
+import kotlin.collections.ArrayList
 
 class DatabaseService(context: Context?) : SQLiteOpenHelper(
     context,
@@ -24,20 +27,29 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(
         private const val TABLE_TRANSACTIONS = "TransactionTable"
         private const val KEY_ID = "id"
         private const val KEY_TRANSACTION = "transaction_item"
+
+        private const val TABLE_SETTINGS = "SettingTable"
+        private const val KEY_LOCALE_CURRENCY = "currency_locale"
+        private const val KEY_LOCALE_DATE = "date_locale"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
         val createTransactionTable =
             ("CREATE TABLE $TABLE_TRANSACTIONS($KEY_ID INTEGER PRIMARY KEY AUTOINCREMENT,$KEY_TRANSACTION TEXT)")
         db?.execSQL(createTransactionTable)
+
+        val createSettingsTable = ("CREATE TABLE $TABLE_SETTINGS($KEY_ID INTEGER PRIMARY KEY,$KEY_LOCALE_CURRENCY TEXT,$KEY_LOCALE_DATE TEXT)")
+        db?.execSQL(createSettingsTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         // Get Current Data
         val transactions: List<Transaction> = read()
+        val settings : Settings = readSettings()
 
         // Drop DB
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_TRANSACTIONS")
+        db?.execSQL("DROP TABLE IF EXISTS $TABLE_SETTINGS")
 
         // Recreate DB
         onCreate(db)
@@ -48,6 +60,8 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(
                 save(transaction)
             }
         }
+
+        saveSettings(settings)
     }
 
     fun read(): List<Transaction> {
@@ -122,6 +136,57 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(
             val transaction = readOne(position)
 
             db.delete(TABLE_TRANSACTIONS, "id='${transaction?.id}'", null)
+        } catch (e: SQLiteException) {
+        }
+    }
+
+    // Settings
+    fun readSettings() : Settings {
+        var settings : Settings = Settings.default()
+
+        val db = this.readableDatabase
+        val cursor: Cursor?
+
+        try {
+            cursor = db.rawQuery("SELECT * FROM $TABLE_SETTINGS LIMIT 1", null)
+
+        } catch (e: SQLiteException) {
+            return settings
+        }
+
+        if (cursor.moveToFirst()) {
+            do {
+                try {
+                    val localeCurrencyString = cursor.getString(cursor.getColumnIndex(KEY_LOCALE_CURRENCY))
+                    val localeDateString = cursor.getString(cursor.getColumnIndex(KEY_LOCALE_DATE))
+
+                    val localeCurrency = Locale.forLanguageTag(localeCurrencyString)
+                    val localeDate = Locale.forLanguageTag(localeDateString)
+
+                    settings = Settings(localeCurrency, localeDate)
+                } catch (e: JsonSyntaxException) {
+                }
+
+            } while (cursor.moveToNext())
+
+        }
+        cursor.close()
+
+        return settings
+    }
+
+    fun saveSettings(settings: Settings) {
+        try {
+            val db = this.writableDatabase
+
+            val contentValues = ContentValues()
+            contentValues.put(KEY_ID, 1)
+            contentValues.put(KEY_LOCALE_CURRENCY, settings.currencyLocale.toLanguageTag())
+            contentValues.put(KEY_LOCALE_DATE, settings.dateLocale.toLanguageTag())
+
+            db.delete(TABLE_SETTINGS,"id=1", null )
+
+            db.insert(TABLE_SETTINGS, null, contentValues)
         } catch (e: SQLiteException) {
         }
     }

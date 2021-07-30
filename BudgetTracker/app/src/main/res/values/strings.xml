@@ -6,6 +6,7 @@
     <string name="list_icon">list_icon</string>
     <string name="overview">Overview</string>
     <string name="loading">Loading…</string>
+    <string name="ok">OK</string>
     <string-array name="categories_array">
         <item>Home &amp; Utilities</item>
         <item>Travel</item>
