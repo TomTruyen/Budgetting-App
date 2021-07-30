@@ -1,7 +1,10 @@
 package com.tomtruyen.budgettracker.ui.statistics
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.MenuItem
+import android.view.View
+import android.widget.TextView
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.tomtruyen.budgettracker.R
@@ -11,14 +14,13 @@ import com.tomtruyen.budgettracker.models.statistics.StatisticsAdapter
 import com.tomtruyen.budgettracker.services.DatabaseService
 import java.util.*
 import kotlin.collections.ArrayList
-import android.view.MenuItem
 
 
 class StatisticsCategoryActivity : AppCompatActivity() {
     private lateinit var mStatisticsAdapter: StatisticsAdapter
     private lateinit var mDatabaseService: DatabaseService
     private var mSettings = Settings.default()
-    private var mTransactions : List<Transaction> = ArrayList()
+    private var mTransactions: List<Transaction> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +46,14 @@ class StatisticsCategoryActivity : AppCompatActivity() {
         val recyclerView: RecyclerView = findViewById(R.id.recyclerView)
         recyclerView.adapter = mStatisticsAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        if(mTransactions.isEmpty()) {
+            findViewById<TextView>(R.id.empty).visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        } else {
+            findViewById<TextView>(R.id.empty).visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+        }
     }
 
     // Go back to StatisticsFragment (when using manifest 'ParentActivity' it would go back to the OverView fragment
@@ -56,15 +66,15 @@ class StatisticsCategoryActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    private fun getTransactions(category: String?, month: Int) : List<Transaction> {
-        if(category == null) {
+    private fun getTransactions(category: String?, month: Int): List<Transaction> {
+        if (category == null) {
             return ArrayList()
         }
 
         val transactions = mDatabaseService.read()
 
         return transactions.filter {
-            month == it.date.month &&  ((category == "Income" && it.isIncome) || (category.lowercase() == it.category?.lowercase()))
+            month == it.date.month && ((category == "Income" && it.isIncome) || (category.lowercase() == it.category?.lowercase()))
         }
     }
 }

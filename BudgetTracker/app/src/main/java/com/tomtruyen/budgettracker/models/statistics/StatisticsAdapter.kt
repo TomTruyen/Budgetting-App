@@ -15,7 +15,11 @@ import com.tomtruyen.budgettracker.models.overview.Transaction
 import com.tomtruyen.budgettracker.models.settings.Settings
 import com.tomtruyen.budgettracker.utils.Utils
 
-class StatisticsAdapter(private val mContext: Context, var mTransactions: List<Transaction>, private val mSettings: Settings) :
+class StatisticsAdapter(
+    private val mContext: Context,
+    var mTransactions: List<Transaction>,
+    private val mSettings: Settings
+) :
     RecyclerView.Adapter<StatisticsAdapter.ViewHolder>() {
     private val mUtils: Utils = Utils()
 

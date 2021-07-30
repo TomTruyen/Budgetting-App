@@ -3,6 +3,8 @@ package com.tomtruyen.budgettracker.models.overview
 import android.graphics.Canvas
 import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
+import android.view.View
+import android.widget.TextView
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.RecyclerView
 
@@ -10,7 +12,9 @@ import androidx.recyclerview.widget.RecyclerView
 class SwipeToDeleteCallback(
     private val mAdapter: BudgetAdapter,
     private val icon: Drawable,
-    private val background: ColorDrawable
+    private val background: ColorDrawable,
+    private val recyclerView: RecyclerView,
+    private val emptyTextView: TextView
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
     override fun onMove(
         recyclerView: RecyclerView,
@@ -23,6 +27,15 @@ class SwipeToDeleteCallback(
     override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
         val position = viewHolder.adapterPosition
         mAdapter.delete(position)
+
+        if (mAdapter.itemCount == 0) {
+            emptyTextView.visibility = View.VISIBLE
+            recyclerView.visibility = View.GONE
+        } else {
+            emptyTextView.visibility = View.GONE
+            recyclerView.visibility = View.VISIBLE
+
+        }
     }
 
     override fun onChildDraw(

@@ -48,7 +48,7 @@ class StatisticsFragment : Fragment() {
     private lateinit var mDatabaseService: DatabaseService
     private lateinit var mBalanceTextView: TextView
     private var mSelectedMonthPosition: Int = Date().month
-    private var mSelectedMonthTransactions : List<Transaction> = ArrayList()
+    private var mSelectedMonthTransactions: List<Transaction> = ArrayList()
     private var mSelectedMonthCategories: ArrayList<StatisticsCategory> = ArrayList()
     private val mUtils: Utils = Utils()
     private var mSettings: Settings = Settings.default()
@@ -98,6 +98,7 @@ class StatisticsFragment : Fragment() {
                 updateMonthTransactions()
                 updateBalance()
                 updateChart()
+                checkEmptyDataset()
             }
 
             override fun onNothingSelected(parentView: AdapterView<*>?) {}
@@ -105,15 +106,19 @@ class StatisticsFragment : Fragment() {
         actionBar?.customView = spinnerLayout
 
         // Setup RecycleView
-        mStatisticsCategoryAdapter = StatisticsCategoryAdapter(requireContext(), mSelectedMonthCategories, mSettings, object : StatisticsCategoryAdapter.ItemClickListener {
-            override fun onItemClick(category: StatisticsCategory) {
-                val intent = Intent(requireContext(), StatisticsCategoryActivity::class.java)
-                intent.putExtra("category", category.title)
-                intent.putExtra("month", mSelectedMonthPosition)
-                startActivity(intent)
-                activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
-            }
-        })
+        mStatisticsCategoryAdapter = StatisticsCategoryAdapter(
+            requireContext(),
+            mSelectedMonthCategories,
+            mSettings,
+            object : StatisticsCategoryAdapter.ItemClickListener {
+                override fun onItemClick(category: StatisticsCategory) {
+                    val intent = Intent(requireContext(), StatisticsCategoryActivity::class.java)
+                    intent.putExtra("category", category.title)
+                    intent.putExtra("month", mSelectedMonthPosition)
+                    startActivity(intent)
+                    activity?.overridePendingTransition(R.anim.enter, R.anim.exit)
+                }
+            })
 
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = mStatisticsCategoryAdapter
@@ -125,6 +130,20 @@ class StatisticsFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun checkEmptyDataset() {
+        if(mSelectedMonthTransactions.isEmpty()) {
+            binding.empty.visibility = View.VISIBLE
+            binding.barChart.visibility = View.GONE
+            binding.recyclerView.visibility = View.GONE
+            binding.balanceSeparator.visibility = View.GONE
+        } else {
+            binding.empty.visibility = View.GONE
+            binding.barChart.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.VISIBLE
+            binding.balanceSeparator.visibility = View.VISIBLE
+        }
     }
 
     @SuppressLint("NotifyDataSetChanged")
@@ -149,11 +168,11 @@ class StatisticsFragment : Fragment() {
         mSelectedMonthCategories.add(StatisticsCategory("Income", 0.0))
 
         mSelectedMonthTransactions.forEach { transaction ->
-            if(transaction.isIncome) {
+            if (transaction.isIncome) {
                 mSelectedMonthCategories.last().total += abs(transaction.price)
             } else {
                 mSelectedMonthCategories.forEach {
-                    if(it.title.lowercase() == transaction.category?.lowercase()) {
+                    if (it.title.lowercase() == transaction.category?.lowercase()) {
                         it.total += abs(transaction.price)
                     }
                 }
@@ -236,8 +255,7 @@ class StatisticsFragment : Fragment() {
 
         if (!isPopulated) {
             chart.data = null
-            chart.setNoDataText("No expenses found this month.")
-            chart.setNoDataTextColor(R.color.red)
+            chart.setNoDataText("")
         }
         chart.invalidate()
     }

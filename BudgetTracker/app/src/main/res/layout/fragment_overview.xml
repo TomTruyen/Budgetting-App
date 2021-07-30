@@ -14,6 +14,14 @@
         app:layout_constrainedHeight="true"
      />
 
+    <TextView
+        android:id="@+id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone"
+        android:text="@string/no_data_available" />
+
     <com.nambimobile.widgets.efab.ExpandableFabLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">

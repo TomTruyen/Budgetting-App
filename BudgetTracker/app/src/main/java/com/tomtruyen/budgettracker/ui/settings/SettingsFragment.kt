@@ -7,10 +7,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.WindowManager
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Button
+import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
-import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
 import com.tomtruyen.budgettracker.R
@@ -27,7 +28,7 @@ class SettingsFragment : Fragment() {
     private lateinit var mSettingsAdapter: SettingsAdapter
     private val mUtils = Utils()
     private lateinit var mDatabaseService: DatabaseService
-    private var mSettings : Settings = Settings.default()
+    private var mSettings: Settings = Settings.default()
 
     private val mLocaleList: List<Locale> = listOf(
         Locale.US,
@@ -61,10 +62,10 @@ class SettingsFragment : Fragment() {
         val listview = binding.settingsListView
         listview.adapter = mSettingsAdapter
 
-        listview.setOnItemClickListener { _ : AdapterView<*>, _: View, position: Int, _ ->
+        listview.setOnItemClickListener { _: AdapterView<*>, _: View, position: Int, _ ->
             val setting = mSettingsAdapter.getItem(position)
 
-            when(setting.title.lowercase()) {
+            when (setting.title.lowercase()) {
                 "currency" -> openCurrencyDialog()
 
             }
@@ -86,7 +87,11 @@ class SettingsFragment : Fragment() {
         dialog.setContentView(R.layout.spinner_dialog_layout)
 
         val spinner = dialog.findViewById<Spinner>(R.id.spinner)
-        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, mUtils.toCurrencyDisplayNames(mLocaleList))
+        val adapter = ArrayAdapter(
+            requireContext(),
+            android.R.layout.simple_spinner_item,
+            mUtils.toCurrencyDisplayNames(mLocaleList)
+        )
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         spinner.adapter = adapter
         spinner.setSelection(mLocaleList.indexOf(mSettings.currencyLocale))

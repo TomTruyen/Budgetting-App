@@ -30,14 +30,15 @@ class SettingsAdapter(private val mContext: Context) : BaseAdapter() {
     }
 
     override fun getView(position: Int, convertView: View?, parent: ViewGroup?): View {
-        val view : View = if(convertView == null) {
-            val inflater : LayoutInflater = mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val view: View = if (convertView == null) {
+            val inflater: LayoutInflater =
+                mContext.getSystemService(Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             inflater.inflate(R.layout.settings_item, parent, false)
         } else {
             convertView
         }
 
-        val settingItem : SettingItem = getItem(position)
+        val settingItem: SettingItem = getItem(position)
 
         view.findViewById<TextView>(R.id.setting_title).text = settingItem.title
         view.findViewById<TextView>(R.id.setting_subtitle).text = settingItem.subtitle

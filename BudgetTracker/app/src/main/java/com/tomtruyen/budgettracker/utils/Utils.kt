@@ -18,13 +18,13 @@ class Utils {
         return numberFormat.format(value)
     }
 
-    fun toCurrencyDisplayNames(locales: List<Locale>) : List<String> {
+    fun toCurrencyDisplayNames(locales: List<Locale>): List<String> {
         val displayNames = ArrayList<String>()
 
         locales.forEach {
             val currency = NumberFormat.getCurrencyInstance(it).currency
 
-            if(currency != null) {
+            if (currency != null) {
                 displayNames.add("${currency.displayName} (${currency.symbol})")
             }
         }

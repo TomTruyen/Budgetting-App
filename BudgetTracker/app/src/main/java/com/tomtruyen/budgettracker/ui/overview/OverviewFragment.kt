@@ -62,7 +62,15 @@ class OverviewFragment : Fragment() {
         )
         val background = ColorDrawable(ContextCompat.getColor(requireContext(), R.color.red))
 
-        val itemTouchHelper = ItemTouchHelper(SwipeToDeleteCallback(mAdapter, icon, background))
+        val itemTouchHelper = ItemTouchHelper(
+            SwipeToDeleteCallback(
+                mAdapter,
+                icon,
+                background,
+                binding.recyclerView,
+                binding.empty
+            )
+        )
         itemTouchHelper.attachToRecyclerView(recyclerView)
 
         binding.incomeBtn.setOnClickListener {
@@ -80,10 +88,13 @@ class OverviewFragment : Fragment() {
                     binding.recyclerView.scrollToPosition(0)
 
                     mAdapter.updateBalance()
+                    checkEmptyDataset()
                 }
             }
 
         mAdapter.updateBalance()
+
+        checkEmptyDataset()
 
         return binding.root
     }
@@ -91,6 +102,17 @@ class OverviewFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    private fun checkEmptyDataset() {
+        if (mAdapter.itemCount == 0) {
+            binding.empty.visibility = View.VISIBLE
+            binding.recyclerView.visibility = View.GONE
+        } else {
+            binding.empty.visibility = View.GONE
+            binding.recyclerView.visibility = View.VISIBLE
+
+        }
     }
 
     private fun openTransactionPage(isIncome: Boolean) {

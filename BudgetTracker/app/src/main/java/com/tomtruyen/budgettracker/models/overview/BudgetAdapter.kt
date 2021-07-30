@@ -18,7 +18,7 @@ import com.tomtruyen.budgettracker.utils.Utils
 class BudgetAdapter(private val mContext: Context?, private val mBalanceTextView: TextView) :
     RecyclerView.Adapter<BudgetAdapter.ViewHolder>() {
     private val mUtils: Utils = Utils()
-    private val databaseService: DatabaseService = DatabaseService(mContext)
+    val databaseService: DatabaseService = DatabaseService(mContext)
     private var mSettings = Settings.default()
 
     init {
@@ -50,7 +50,8 @@ class BudgetAdapter(private val mContext: Context?, private val mBalanceTextView
 
             viewHolder.dateText.text = mUtils.toFormatString(item.date)
             viewHolder.titleText.text = item.title
-            viewHolder.priceText.text = mUtils.toCurrencyString(item.price, mSettings.currencyLocale)
+            viewHolder.priceText.text =
+                mUtils.toCurrencyString(item.price, mSettings.currencyLocale)
 
             if (mContext != null) {
                 viewHolder.imageView.backgroundTintList =

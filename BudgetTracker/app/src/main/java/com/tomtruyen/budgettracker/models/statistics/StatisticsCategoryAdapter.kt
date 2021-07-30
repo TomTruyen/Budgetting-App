@@ -14,7 +14,12 @@ import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.models.settings.Settings
 import com.tomtruyen.budgettracker.utils.Utils
 
-class StatisticsCategoryAdapter(private val mContext: Context, var mCategories : List<StatisticsCategory>, private val mSettings: Settings, private val mItemListener: ItemClickListener) : RecyclerView.Adapter<StatisticsCategoryAdapter.ViewHolder>() {
+class StatisticsCategoryAdapter(
+    private val mContext: Context,
+    var mCategories: List<StatisticsCategory>,
+    private val mSettings: Settings,
+    private val mItemListener: ItemClickListener
+) : RecyclerView.Adapter<StatisticsCategoryAdapter.ViewHolder>() {
     private val mUtils: Utils = Utils()
 
     interface ItemClickListener {
@@ -34,7 +39,8 @@ class StatisticsCategoryAdapter(private val mContext: Context, var mCategories :
         val context = parent.context
         val inflater = LayoutInflater.from(context)
 
-        val listItem = inflater.inflate(R.layout.fragment_statistics_category_list_item, parent, false)
+        val listItem =
+            inflater.inflate(R.layout.fragment_statistics_category_list_item, parent, false)
 
         return ViewHolder(listItem)
     }
@@ -44,13 +50,14 @@ class StatisticsCategoryAdapter(private val mContext: Context, var mCategories :
         val category: StatisticsCategory = mCategories[position]
 
         viewHolder.titleText.text = category.title
-        viewHolder.priceText.text = mUtils.toCurrencyString(category.total, mSettings.currencyLocale)
+        viewHolder.priceText.text =
+            mUtils.toCurrencyString(category.total, mSettings.currencyLocale)
 
         viewHolder.itemView.setOnClickListener {
             mItemListener.onItemClick(mCategories[position])
         }
 
-        if(category.title == "Income") {
+        if (category.title == "Income") {
             viewHolder.priceText.setTextColor(ContextCompat.getColor(mContext, R.color.green))
             viewHolder.imageView.backgroundTintList =
                 AppCompatResources.getColorStateList(mContext, R.color.green)

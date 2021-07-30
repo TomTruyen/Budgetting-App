@@ -38,14 +38,15 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(
             ("CREATE TABLE $TABLE_TRANSACTIONS($KEY_ID INTEGER PRIMARY KEY AUTOINCREMENT,$KEY_TRANSACTION TEXT)")
         db?.execSQL(createTransactionTable)
 
-        val createSettingsTable = ("CREATE TABLE $TABLE_SETTINGS($KEY_ID INTEGER PRIMARY KEY,$KEY_LOCALE_CURRENCY TEXT,$KEY_LOCALE_DATE TEXT)")
+        val createSettingsTable =
+            ("CREATE TABLE $TABLE_SETTINGS($KEY_ID INTEGER PRIMARY KEY,$KEY_LOCALE_CURRENCY TEXT,$KEY_LOCALE_DATE TEXT)")
         db?.execSQL(createSettingsTable)
     }
 
     override fun onUpgrade(db: SQLiteDatabase?, oldVersion: Int, newVersion: Int) {
         // Get Current Data
         val transactions: List<Transaction> = read()
-        val settings : Settings = readSettings()
+        val settings: Settings = readSettings()
 
         // Drop DB
         db?.execSQL("DROP TABLE IF EXISTS $TABLE_TRANSACTIONS")
@@ -141,8 +142,8 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(
     }
 
     // Settings
-    fun readSettings() : Settings {
-        var settings : Settings = Settings.default()
+    fun readSettings(): Settings {
+        var settings: Settings = Settings.default()
 
         val db = this.readableDatabase
         val cursor: Cursor?
@@ -157,7 +158,8 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(
         if (cursor.moveToFirst()) {
             do {
                 try {
-                    val localeCurrencyString = cursor.getString(cursor.getColumnIndex(KEY_LOCALE_CURRENCY))
+                    val localeCurrencyString =
+                        cursor.getString(cursor.getColumnIndex(KEY_LOCALE_CURRENCY))
                     val localeDateString = cursor.getString(cursor.getColumnIndex(KEY_LOCALE_DATE))
 
                     val localeCurrency = Locale.forLanguageTag(localeCurrencyString)
@@ -184,7 +186,7 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(
             contentValues.put(KEY_LOCALE_CURRENCY, settings.currencyLocale.toLanguageTag())
             contentValues.put(KEY_LOCALE_DATE, settings.dateLocale.toLanguageTag())
 
-            db.delete(TABLE_SETTINGS,"id=1", null )
+            db.delete(TABLE_SETTINGS, "id=1", null)
 
             db.insert(TABLE_SETTINGS, null, contentValues)
         } catch (e: SQLiteException) {
