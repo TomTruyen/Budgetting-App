@@ -31,6 +31,7 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(
         private const val TABLE_SETTINGS = "SettingTable"
         private const val KEY_LOCALE_CURRENCY = "currency_locale"
         private const val KEY_LOCALE_DATE = "date_locale"
+        private const val KEY_MONTHLY_BUDGET = "monthly_budget"
     }
 
     override fun onCreate(db: SQLiteDatabase?) {
@@ -39,7 +40,7 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(
         db?.execSQL(createTransactionTable)
 
         val createSettingsTable =
-            ("CREATE TABLE $TABLE_SETTINGS($KEY_ID INTEGER PRIMARY KEY,$KEY_LOCALE_CURRENCY TEXT,$KEY_LOCALE_DATE TEXT)")
+            ("CREATE TABLE $TABLE_SETTINGS($KEY_ID INTEGER PRIMARY KEY,$KEY_LOCALE_CURRENCY TEXT,$KEY_LOCALE_DATE TEXT,$KEY_MONTHLY_BUDGET REAL)")
         db?.execSQL(createSettingsTable)
     }
 
@@ -161,11 +162,12 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(
                     val localeCurrencyString =
                         cursor.getString(cursor.getColumnIndex(KEY_LOCALE_CURRENCY))
                     val localeDateString = cursor.getString(cursor.getColumnIndex(KEY_LOCALE_DATE))
+                    val monthlyBudget = cursor.getDouble(cursor.getColumnIndex(KEY_MONTHLY_BUDGET))
 
                     val localeCurrency = Locale.forLanguageTag(localeCurrencyString)
                     val localeDate = Locale.forLanguageTag(localeDateString)
 
-                    settings = Settings(localeCurrency, localeDate)
+                    settings = Settings(localeCurrency, localeDate, monthlyBudget)
                 } catch (e: JsonSyntaxException) {
                 }
 
@@ -185,6 +187,7 @@ class DatabaseService(context: Context?) : SQLiteOpenHelper(
             contentValues.put(KEY_ID, 1)
             contentValues.put(KEY_LOCALE_CURRENCY, settings.currencyLocale.toLanguageTag())
             contentValues.put(KEY_LOCALE_DATE, settings.dateLocale.toLanguageTag())
+            contentValues.put(KEY_MONTHLY_BUDGET, settings.monthlyBudget)
 
             db.delete(TABLE_SETTINGS, "id=1", null)
 

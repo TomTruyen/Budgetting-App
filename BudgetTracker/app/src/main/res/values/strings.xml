@@ -8,6 +8,7 @@
     <string name="loading">Loading…</string>
     <string name="ok">OK</string>
     <string name="no_data_available">No data available</string>
+    <string name="no_money">$ 0.00</string>
     <string-array name="categories_array">
         <item>Home &amp; Utilities</item>
         <item>Travel</item>

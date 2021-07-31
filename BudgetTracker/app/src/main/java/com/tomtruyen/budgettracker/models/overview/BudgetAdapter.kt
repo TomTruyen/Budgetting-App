@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.ContextCompat
@@ -14,8 +15,16 @@ import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.models.settings.Settings
 import com.tomtruyen.budgettracker.services.DatabaseService
 import com.tomtruyen.budgettracker.utils.Utils
+import java.util.*
+import kotlin.math.abs
 
-class BudgetAdapter(private val mContext: Context?, private val mBalanceTextView: TextView) :
+class BudgetAdapter(
+    private val mContext: Context?,
+    private val mBalanceTextView: TextView,
+    private val mBudgetMonthCurrent: TextView,
+    private val mBudgetMonthLimit: TextView,
+    private val mBudgetMonthProgress: ProgressBar
+) :
     RecyclerView.Adapter<BudgetAdapter.ViewHolder>() {
     private val mUtils: Utils = Utils()
     val databaseService: DatabaseService = DatabaseService(mContext)
@@ -120,6 +129,28 @@ class BudgetAdapter(private val mContext: Context?, private val mBalanceTextView
         notifyItemRemoved(position)
 
         updateBalance()
+    }
+
+    fun updateMonthlyProgress() {
+        val settings = databaseService.readSettings()
+
+        val expenses = getMonthExpenses()
+
+        mBudgetMonthCurrent.text = mUtils.toCurrencyString(expenses, settings.currencyLocale)
+        mBudgetMonthLimit.text =
+            mUtils.toCurrencyString(settings.monthlyBudget, settings.currencyLocale)
+
+        mBudgetMonthProgress.max = settings.monthlyBudget.toInt()
+        mBudgetMonthProgress.progress = expenses.toInt()
+    }
+
+    private fun getMonthExpenses(): Double {
+        val transactions = databaseService.read()
+
+        val monthExpenseTransactions =
+            transactions.filter { it.date.month == Date().month && !it.isIncome }
+
+        return monthExpenseTransactions.sumOf { abs(it.price) }
     }
 
     fun updateBalance() {

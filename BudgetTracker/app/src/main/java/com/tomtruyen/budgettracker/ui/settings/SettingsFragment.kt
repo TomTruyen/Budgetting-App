@@ -14,6 +14,7 @@ import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.textfield.TextInputLayout
 import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.databinding.FragmentSettingsBinding
 import com.tomtruyen.budgettracker.models.settings.Settings
@@ -67,7 +68,7 @@ class SettingsFragment : Fragment() {
 
             when (setting.title.lowercase()) {
                 "currency" -> openCurrencyDialog()
-
+                "monthly budget" -> openBudgetDialog()
             }
         }
 
@@ -104,9 +105,36 @@ class SettingsFragment : Fragment() {
             mSettings.currencyLocale = selectedLocale
             mDatabaseService.saveSettings(mSettings)
 
-            Snackbar.make(requireView(), "Currency saved", Snackbar.LENGTH_SHORT).show()
+            Snackbar.make(requireView(), "Currency saved", 1000).show()
 
             dialog.dismiss()
+        }
+
+        dialog.create()
+        dialog.show()
+    }
+
+    private fun openBudgetDialog() {
+        val dialog = Dialog(requireContext())
+
+        dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+        dialog.setContentView(R.layout.edit_text_dialog_layout)
+
+        val submitButton = dialog.findViewById<Button>(R.id.submitButton)
+        submitButton.setOnClickListener {
+            val textInputLayout = dialog.findViewById<TextInputLayout>(R.id.numberInput)
+            val textInputValue = textInputLayout.editText?.text.toString()
+            if (textInputValue == "") {
+                textInputLayout.error = "Limit can't be empty"
+            } else {
+                textInputLayout.error = null
+                mSettings.monthlyBudget = textInputValue.toDouble()
+                mDatabaseService.saveSettings(mSettings)
+
+                Snackbar.make(requireView(), "Monthly budget saved", 1000).show()
+
+                dialog.dismiss()
+            }
         }
 
         dialog.create()

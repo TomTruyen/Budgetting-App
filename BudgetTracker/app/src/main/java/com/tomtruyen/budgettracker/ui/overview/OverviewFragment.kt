@@ -28,7 +28,6 @@ class OverviewFragment : Fragment() {
 
     private var _binding: FragmentOverviewBinding? = null
     private lateinit var mAdapter: BudgetAdapter
-
     private lateinit var mTransactionResultLauncher: ActivityResultLauncher<Intent>
 
     // This property is only valid between onCreateView and
@@ -48,7 +47,13 @@ class OverviewFragment : Fragment() {
         val customActionBar = inflater.inflate(R.layout.overview_actionbar, container, false)
         actionBar?.customView = customActionBar
 
-        mAdapter = BudgetAdapter(context, customActionBar.findViewById(R.id.balanceText))
+        mAdapter = BudgetAdapter(
+            context,
+            customActionBar.findViewById(R.id.balanceText),
+            binding.monthBudgetCurrent,
+            binding.monthBudgetLimit,
+            binding.monthBudgetProgress
+        )
         val recyclerView: RecyclerView = binding.recyclerView
         recyclerView.adapter = mAdapter
         recyclerView.layoutManager = LinearLayoutManager(context)
@@ -88,12 +93,13 @@ class OverviewFragment : Fragment() {
                     binding.recyclerView.scrollToPosition(0)
 
                     mAdapter.updateBalance()
+                    mAdapter.updateMonthlyProgress()
                     checkEmptyDataset()
                 }
             }
 
         mAdapter.updateBalance()
-
+        mAdapter.updateMonthlyProgress()
         checkEmptyDataset()
 
         return binding.root

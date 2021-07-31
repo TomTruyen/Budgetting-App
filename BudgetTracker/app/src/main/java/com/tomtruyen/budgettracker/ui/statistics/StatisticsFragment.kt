@@ -133,7 +133,7 @@ class StatisticsFragment : Fragment() {
     }
 
     private fun checkEmptyDataset() {
-        if(mSelectedMonthTransactions.isEmpty()) {
+        if (mSelectedMonthTransactions.isEmpty()) {
             binding.empty.visibility = View.VISIBLE
             binding.barChart.visibility = View.GONE
             binding.recyclerView.visibility = View.GONE

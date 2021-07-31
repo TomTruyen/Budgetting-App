@@ -13,8 +13,10 @@ class SettingsAdapter(private val mContext: Context) : BaseAdapter() {
 
     init {
         val currencySetting = SettingItem("Currency", "Select what currency should be used")
+        val monthlyBudgetSetting = SettingItem("Monthly Budget", "Set your monthly spending limit")
 
         mSettingsList.add(currencySetting)
+        mSettingsList.add(monthlyBudgetSetting)
     }
 
     override fun getCount(): Int {

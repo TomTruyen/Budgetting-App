@@ -14,7 +14,7 @@ class SwipeToDeleteCallback(
     private val icon: Drawable,
     private val background: ColorDrawable,
     private val recyclerView: RecyclerView,
-    private val emptyTextView: TextView
+    private val emptyTextView: TextView,
 ) : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT or ItemTouchHelper.RIGHT) {
     override fun onMove(
         recyclerView: RecyclerView,
@@ -34,8 +34,9 @@ class SwipeToDeleteCallback(
         } else {
             emptyTextView.visibility = View.GONE
             recyclerView.visibility = View.VISIBLE
-
         }
+
+        mAdapter.updateMonthlyProgress()
     }
 
     override fun onChildDraw(

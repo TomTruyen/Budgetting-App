@@ -6,13 +6,58 @@
     android:layout_height="match_parent"
     tools:context=".ui.overview.OverviewFragment">
 
+    <LinearLayout
+        android:id="@+id/monthLimitLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_margin="8dp"
+            >
+            <TextView
+                android:id="@+id/monthBudgetCurrent"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/no_money"
+                android:textStyle="bold"
+                android:textAlignment="textStart"
+                />
+
+            <TextView
+                android:id="@+id/monthBudgetLimit"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:textStyle="bold"
+                android:text="@string/no_money"
+                android:textAlignment="textEnd"
+                />
+
+        </LinearLayout>
+
+        <ProgressBar
+            android:id="@+id/monthBudgetProgress"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="8dp"
+            android:max="100"
+            android:progress="45"
+            android:progressDrawable="@drawable/progressbar_progress"
+            />
+    </LinearLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constrainedHeight="true"
-     />
+        android:layout_below="@id/monthLimitLayout"
+        app:layout_constrainedHeight="true" />
 
     <TextView
         android:id="@+id/empty"
@@ -36,8 +81,8 @@
             android:layout_gravity="end|bottom"
             android:layout_marginEnd="@dimen/efab_ui_margin_medium"
             android:layout_marginBottom="@dimen/efab_ui_margin_medium"
-            app:efab_color="@color/primary"
             app:efab_closingAnticipateTension="0"
+            app:efab_color="@color/primary"
             app:efab_iconAnimationRotationDeg="-225" />
 
         <com.nambimobile.widgets.efab.FabOption
@@ -45,16 +90,16 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_color="@color/green"
-            app:label_backgroundColor="@color/green"
             app:fab_icon="@drawable/ic_income"
+            app:label_backgroundColor="@color/green"
             app:label_text="Add income" />
 
         <com.nambimobile.widgets.efab.FabOption
             android:id="@+id/expenseBtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:fab_icon="@drawable/ic_expense"
             app:fab_color="@color/red"
+            app:fab_icon="@drawable/ic_expense"
             app:label_backgroundColor="@color/red"
             app:label_text="Add expense" />
     </com.nambimobile.widgets.efab.ExpandableFabLayout>

@@ -47,7 +47,7 @@ class StatisticsCategoryActivity : AppCompatActivity() {
         recyclerView.adapter = mStatisticsAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        if(mTransactions.isEmpty()) {
+        if (mTransactions.isEmpty()) {
             findViewById<TextView>(R.id.empty).visibility = View.VISIBLE
             recyclerView.visibility = View.GONE
         } else {
