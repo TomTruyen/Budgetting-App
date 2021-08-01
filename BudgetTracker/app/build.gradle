@@ -61,4 +61,7 @@ dependencies {
 
     // Charts
     implementation 'com.github.PhilJay:MPAndroidChart:3.1.0'
+
+    // Ads
+    implementation 'com.google.android.gms:play-services-ads:20.2.0'
 }

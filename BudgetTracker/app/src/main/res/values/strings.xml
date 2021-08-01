@@ -1,5 +1,7 @@
 <resources>
     <string name="app_name">Budgety</string>
+    <string name="admob_app_id">ca-app-pub-8796150055601896~9915408803</string>
+    <string name="admob_interstitial_ad">ca-app-pub-8796150055601896/5832887083</string>
     <string name="title_statistics">Statistics</string>
     <string name="title_overview">Overview</string>
     <string name="title_settings">Settings</string>

@@ -35,4 +35,13 @@ class Utils {
     fun densityToPixels(dp: Int, scale: Float): Int {
         return (dp * scale + 0.5f).toInt()
     }
+
+    fun shouldShowAd() : Boolean {
+        val random = Random()
+
+        val generated = random.nextInt(100)
+
+        // 25% chance of showing ad
+        return generated < 25
+    }
 }

@@ -5,16 +5,22 @@ import android.view.View
 import android.widget.ArrayAdapter
 import android.widget.Spinner
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.gms.ads.*
+import com.google.android.gms.ads.interstitial.InterstitialAd
+import com.google.android.gms.ads.interstitial.InterstitialAdLoadCallback
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import com.tomtruyen.budgettracker.R
 import com.tomtruyen.budgettracker.models.overview.Transaction
 import com.tomtruyen.budgettracker.services.DatabaseService
+import com.tomtruyen.budgettracker.utils.Utils
 import java.util.*
 
 class TransactionActivity : AppCompatActivity() {
     private var isIncome: Boolean = true
     private lateinit var spinner: Spinner
+    private val mUtils : Utils = Utils()
+    private var mInterstitialAd : InterstitialAd? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,6 +50,20 @@ class TransactionActivity : AppCompatActivity() {
 
         // Set onClickListener
         findViewById<FloatingActionButton>(R.id.submitButton).setOnClickListener { saveTransaction() }
+
+        // Ads
+        MobileAds.initialize(this) {}
+
+        val adRequest = AdRequest.Builder().build()
+        InterstitialAd.load(this, getString(R.string.admob_interstitial_ad), adRequest, object: InterstitialAdLoadCallback() {
+            override fun onAdFailedToLoad(adError: LoadAdError) {
+                mInterstitialAd = null
+            }
+
+            override fun onAdLoaded(interstitialAd: InterstitialAd) {
+                mInterstitialAd = interstitialAd
+            }
+        })
     }
 
     private fun saveTransaction() {
@@ -61,6 +81,29 @@ class TransactionActivity : AppCompatActivity() {
             databaseService.save(transaction)
 
             setResult(RESULT_OK)
+            tryShowAdAndFinish()
+        }
+    }
+
+    private fun tryShowAdAndFinish() {
+        if(mInterstitialAd != null && mUtils.shouldShowAd()) {
+            mInterstitialAd?.fullScreenContentCallback = object : FullScreenContentCallback() {
+                override fun onAdDismissedFullScreenContent() {
+                    finish()
+                }
+
+                override fun onAdFailedToShowFullScreenContent(adError: AdError) {
+                    finish()
+                }
+
+                override fun onAdShowedFullScreenContent() {
+                    mInterstitialAd = null
+                    finish()
+                }
+            }
+
+            mInterstitialAd?.show(this)
+        } else {
             finish()
         }
     }
