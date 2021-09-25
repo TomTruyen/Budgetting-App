@@ -1,15 +1,14 @@
 package com.tomtruyen.budgettracker
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.view.LayoutInflater
-import android.view.MotionEvent
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.widget.ViewPager2
 
-class CardSlidePagerAdapter(private val mContext: Context) : RecyclerView.Adapter<CardSlidePagerAdapter.MyHolder>() {
+class AccountCardAdapter(private val mContext: Context) : RecyclerView.Adapter<AccountCardAdapter.MyHolder>() {
     var mCardPageCount = 5
 
     inner class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -21,6 +20,7 @@ class CardSlidePagerAdapter(private val mContext: Context) : RecyclerView.Adapte
         return MyHolder(LayoutInflater.from(mContext).inflate(R.layout.card_fragment, parent, false))
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
         holder.mAccountName.text = "Account #${position}"
     }

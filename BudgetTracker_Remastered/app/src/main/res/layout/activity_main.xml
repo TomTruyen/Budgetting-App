@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
     tools:context=".MainActivity">
 
@@ -18,18 +18,18 @@
         android:textStyle="bold"
     />
 
-
-    <androidx.viewpager2.widget.ViewPager2
-        android:id="@+id/card_pager"
+    <com.factor.bouncy.BouncyRecyclerView
+        android:id="@+id/account_recyclerview"
         android:layout_width="match_parent"
         android:layout_height="250dp"
-        android:overScrollMode="never"
     />
 
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="List with transactions here (RecyclerView)"
+        app:recyclerview_damping_ratio="DAMPING_RATIO_LOW_BOUNCY"
+        app:recyclerview_stiffness="STIFFNESS_MEDIUM"
         />
 
 
