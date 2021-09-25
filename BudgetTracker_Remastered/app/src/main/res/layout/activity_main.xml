@@ -10,11 +10,11 @@
     <TextView
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_margin="16dp"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginVertical="8dp"
         android:text="@string/my_accounts"
         android:textColor="@color/black"
         android:textSize="30sp"
-        android:layout_marginVertical="8dp"
         android:textStyle="bold"
     />
 
