@@ -14,8 +14,7 @@
         android:layout_marginVertical="8dp"
         android:text="@string/my_accounts"
         android:textColor="@color/black"
-        android:textSize="30sp"
-        android:textStyle="bold"
+        android:textSize="26sp"
     />
 
     <com.factor.bouncy.BouncyRecyclerView

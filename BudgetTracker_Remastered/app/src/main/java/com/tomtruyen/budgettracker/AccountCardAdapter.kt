@@ -2,29 +2,42 @@ package com.tomtruyen.budgettracker
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class AccountCardAdapter(private val mContext: Context) : RecyclerView.Adapter<AccountCardAdapter.MyHolder>() {
-    var mCardPageCount = 5
+    private var mCardPageCount = 5
 
     companion object {
         private const val CARD = 0
         private const val ADD_CARD = 1
     }
 
-    inner class MyHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        var mAccountName = itemView.findViewById<TextView>(R.id.account_name)
-        var mAccountBalance = itemView.findViewById<TextView>(R.id.account_balance)
+    inner class MyHolder(itemView: View, viewType: Int) : RecyclerView.ViewHolder(itemView) {
+        var mAccountName : TextView? = null
+        var mAccountBalance : TextView? = null
+
+        var mAccountAddButton: Button? = null
+
+        init {
+            if(viewType == CARD) {
+                mAccountName = itemView.findViewById(R.id.account_name)
+                mAccountBalance = itemView.findViewById(R.id.account_balance)
+            } else {
+                mAccountAddButton = itemView.findViewById(R.id.account_add_button)
+            }
+        }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
-        if(viewType == ADD_CARD) return MyHolder(LayoutInflater.from(mContext).inflate(R.layout.card_add_fragment, parent, false))
+        if(viewType == ADD_CARD) return MyHolder(LayoutInflater.from(mContext).inflate(R.layout.card_add_fragment, parent, false), viewType)
 
-        return MyHolder(LayoutInflater.from(mContext).inflate(R.layout.card_fragment, parent, false))
+        return MyHolder(LayoutInflater.from(mContext).inflate(R.layout.card_fragment, parent, false), viewType)
     }
 
     override fun getItemViewType(position: Int): Int {
@@ -36,7 +49,12 @@ class AccountCardAdapter(private val mContext: Context) : RecyclerView.Adapter<A
     @SuppressLint("SetTextI18n")
     override fun onBindViewHolder(holder: MyHolder, position: Int) {
         if(holder.itemViewType == CARD) {
-            holder.mAccountName.text = "Account #${position}"
+            holder.mAccountName?.text = "Account #${position}"
+        } else {
+            holder.mAccountAddButton?.setOnClickListener {
+                val intent = Intent(mContext, AccountAddActivity::class.java)
+                mContext.startActivity(intent)
+            }
         }
     }
 

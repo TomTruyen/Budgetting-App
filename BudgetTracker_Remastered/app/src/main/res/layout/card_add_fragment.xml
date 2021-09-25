@@ -9,7 +9,7 @@
     android:padding="16dp">
 
     <Button
-        android:id="@+id/card_add_button"
+        android:id="@+id/account_add_button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@drawable/button_shape"
