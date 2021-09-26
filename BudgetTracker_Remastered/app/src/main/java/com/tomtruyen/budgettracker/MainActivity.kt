@@ -10,6 +10,7 @@ import androidx.viewpager2.widget.ViewPager2
 
 class MainActivity : AppCompatActivity() {
     private lateinit var mAccountRecyclerView: RecyclerView
+    private lateinit var mTransactionRecyclerView: RecyclerView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -20,5 +21,12 @@ class MainActivity : AppCompatActivity() {
 
         // Setup Horizontal RecyclerView
         mAccountRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false)
+
+        mTransactionRecyclerView = findViewById(R.id.transaction_recyclerview)
+        mTransactionRecyclerView.adapter = TransactionAdapter(this, this)
+        mTransactionRecyclerView.layoutManager = LinearLayoutManager(this)
+
+        // Setup Vertical RecyclerView
+//        mTransactionRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
     }
 }

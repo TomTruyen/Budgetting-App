@@ -35,9 +35,9 @@ class AccountCardAdapter(private val mContext: Context) : RecyclerView.Adapter<A
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyHolder {
-        if(viewType == ADD_CARD) return MyHolder(LayoutInflater.from(mContext).inflate(R.layout.card_add_fragment, parent, false), viewType)
+        if(viewType == ADD_CARD) return MyHolder(LayoutInflater.from(mContext).inflate(R.layout.card_add_item, parent, false), viewType)
 
-        return MyHolder(LayoutInflater.from(mContext).inflate(R.layout.card_fragment, parent, false), viewType)
+        return MyHolder(LayoutInflater.from(mContext).inflate(R.layout.card_item, parent, false), viewType)
     }
 
     override fun getItemViewType(position: Int): Int {

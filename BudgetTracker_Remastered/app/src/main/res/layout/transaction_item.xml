@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingHorizontal="16dp"
+    android:paddingVertical="8dp"
+    android:gravity="center_vertical">
+    <ImageView
+        android:id="@+id/transaction_image"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:background="@drawable/ic_image"
+        android:contentDescription="Image"
+    />
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="vertical"
+        android:gravity="center_vertical"
+    >
+        <TextView
+            android:id="@+id/transaction_title"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Title"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            android:textColor="@android:color/black"
+            />
+
+        <TextView
+            android:id="@+id/transaction_price"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="$1250.00"
+            />
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/transaction_button"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:padding="10dp"
+        android:background="@drawable/ic_chevron_right"
+        android:contentDescription="Transaction Button"
+        app:backgroundTint="@android:color/black"
+    />
+</LinearLayout>
