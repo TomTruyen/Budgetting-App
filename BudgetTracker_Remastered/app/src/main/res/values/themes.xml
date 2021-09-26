@@ -16,10 +16,12 @@
 
         <!--  Edge Effect (Overscroll) RecyclerView Color -->
         <item name="android:colorEdgeEffect">@color/card_blue</item>
+
+        <item name="fontFamily">sans-serif-light</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
     </style>
 
     <style name="Theme.Text" parent="@android:style/TextAppearance">
         <item name="android:textColor">#111111</item>
-        <item name="android:fontFamily">sans-serif</item>
     </style>
 </resources>
