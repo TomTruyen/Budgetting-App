@@ -2,9 +2,9 @@ package com.tomtruyen.budgettracker.overview
 
 import android.content.Intent
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -22,6 +22,11 @@ class OverviewFragment : Fragment() {
     ): View {
         val view = inflater.inflate(R.layout.fragment_overview, container, false)
 
+        setHasOptionsMenu(true)
+
+//        val actionBar = (activity as AppCompatActivity?)?.supportActionBar
+
+
         mAccountRecyclerView = view.findViewById(R.id.account_recyclerview)
         mAccountRecyclerView.adapter = activity?.let { AccountCardAdapter(it) }
 
@@ -32,15 +37,26 @@ class OverviewFragment : Fragment() {
         mTransactionRecyclerView.adapter = activity?.let { TransactionAdapter(it, it) }
         mTransactionRecyclerView.layoutManager = LinearLayoutManager(activity)
 
-        view.findViewById<FabOption>(R.id.btn_income).setOnClickListener { openTransactionActivity(true) }
-        view.findViewById<FabOption>(R.id.btn_expense).setOnClickListener { openTransactionActivity(false) }
-
         return view
     }
 
-    private fun openTransactionActivity(isIncome: Boolean) {
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.overview_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem) = when(item.itemId) {
+        R.id.btn_add_transaction -> {
+            openTransactionActivity()
+
+            true
+        }
+        else -> {
+            super.onOptionsItemSelected(item)
+        }
+    }
+
+    private fun openTransactionActivity() {
         val intent = Intent(activity, TransactionAddActivity::class.java)
-        intent.putExtra("isIncome", isIncome)
         startActivity(intent)
     }
 }
