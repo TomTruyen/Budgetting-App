@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/card_shape"
     android:orientation="vertical"
-    android:layout_margin="16dp"
+    android:layout_marginHorizontal="16dp"
     android:padding="16dp"
     >
         <TextView
