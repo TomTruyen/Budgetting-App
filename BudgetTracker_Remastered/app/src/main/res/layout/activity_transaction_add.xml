@@ -55,22 +55,5 @@
                 android:inputType="numberDecimal" />
         </LinearLayout>
     </LinearLayout>
-
-
-
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/btn_submit"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="end|bottom"
-        android:src="@drawable/ic_check"
-        android:backgroundTint="@color/primary"
-        app:borderWidth="0dp"
-        app:tint="@color/white"
-        android:layout_margin="8dp"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentEnd="true"
-        android:contentDescription="@string/add_transaction" />
-
-
+    
 </RelativeLayout>
