@@ -1,7 +1,8 @@
-package com.tomtruyen.budgettracker
+package com.tomtruyen.budgettracker.overview
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.tomtruyen.budgettracker.R
 
 class AccountAddActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

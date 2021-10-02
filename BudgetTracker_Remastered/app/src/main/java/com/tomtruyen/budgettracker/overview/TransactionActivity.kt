@@ -1,8 +1,9 @@
-package com.tomtruyen.budgettracker
+package com.tomtruyen.budgettracker.overview
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import com.tomtruyen.budgettracker.R
 
 class TransactionActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

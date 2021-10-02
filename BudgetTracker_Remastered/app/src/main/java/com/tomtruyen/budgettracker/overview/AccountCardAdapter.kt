@@ -1,4 +1,4 @@
-package com.tomtruyen.budgettracker
+package com.tomtruyen.budgettracker.overview
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.tomtruyen.budgettracker.R
 
 class AccountCardAdapter(private val mContext: Context) : RecyclerView.Adapter<AccountCardAdapter.MyHolder>() {
     private var mCardPageCount = 5

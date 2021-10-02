@@ -1,84 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/container"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".MainActivity">
+    >
 
-    <TextView
-        android:id="@+id/my_accounts_text"
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/nav_view"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginHorizontal="8dp"
+        android:layout_marginBottom="16dp"
+        android:background="@drawable/bottom_navigation_background"
+        android:elevation="8dp"
+        app:itemIconTint="@drawable/bottom_navigation_color_selector"
+        app:labelVisibilityMode="unlabeled"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
+
+    <fragment
+        android:id="@+id/nav_host_fragment_activity_main"
+        android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="match_parent"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="8dp"
-        android:text="@string/my_accounts"
-        android:textColor="@color/black"
-        android:textSize="26sp"
-    />
+        android:layout_height="0dp"
+        app:defaultNavHost="true"
+        app:layout_constraintBottom_toTopOf="@id/nav_view"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginBottom="16dp"
+        app:navGraph="@navigation/bottom_nav_navigation" />
 
-    <com.factor.bouncy.BouncyRecyclerView
-        android:id="@+id/account_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="250dp"
-        android:layout_below="@id/my_accounts_text"
-    />
-
-    <TextView
-        android:id="@+id/transactions_text"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:layout_marginHorizontal="16dp"
-        android:layout_marginVertical="8dp"
-        android:text="Transactions"
-        android:textColor="@color/black"
-        android:textSize="26sp"
-        android:layout_below="@id/account_recyclerview"
-        />
-
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/transaction_recyclerview"
-        android:layout_width="match_parent"
-        android:layout_height="fill_parent"
-        app:layout_constrainedHeight="true"
-        android:layout_below="@id/transactions_text"
-        />
-
-    <com.nambimobile.widgets.efab.ExpandableFabLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
-
-        <com.nambimobile.widgets.efab.Overlay
-            android:layout_width="match_parent"
-            android:layout_height="match_parent" />
-
-        <com.nambimobile.widgets.efab.ExpandableFab
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="end|bottom"
-            android:layout_marginEnd="@dimen/efab_ui_margin_medium"
-            android:layout_marginBottom="@dimen/efab_ui_margin_medium"
-            app:efab_closingAnticipateTension="0"
-            app:efab_color="@color/card_blue"
-            app:efab_iconAnimationRotationDeg="-225" />
-
-        <com.nambimobile.widgets.efab.FabOption
-            android:id="@+id/btn_income"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_color="@android:color/holo_green_dark"
-            app:fab_icon="@drawable/ic_income"
-            app:label_backgroundColor="@android:color/holo_green_dark"
-            app:label_text="Add income" />
-
-        <com.nambimobile.widgets.efab.FabOption
-            android:id="@+id/btn_expense"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:fab_color="@android:color/holo_red_light"
-            app:fab_icon="@drawable/ic_expense"
-            app:label_backgroundColor="@android:color/holo_red_light"
-            app:label_text="Add expense" />
-    </com.nambimobile.widgets.efab.ExpandableFabLayout>
-
-</RelativeLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>
