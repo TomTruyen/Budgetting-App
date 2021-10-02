@@ -59,7 +59,7 @@
             android:layout_marginEnd="@dimen/efab_ui_margin_medium"
             android:layout_marginBottom="@dimen/efab_ui_margin_medium"
             app:efab_closingAnticipateTension="0"
-            app:efab_color="@color/card_blue"
+            app:efab_color="@color/primary"
             app:efab_iconAnimationRotationDeg="-225" />
 
         <com.nambimobile.widgets.efab.FabOption

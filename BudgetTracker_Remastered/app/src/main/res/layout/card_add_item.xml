@@ -14,7 +14,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/button_shape"
         android:text="Add Account"
-        android:textColor="@color/card_blue"
+        android:textColor="@color/primary"
         app:backgroundTint="@color/white"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"

@@ -2,8 +2,8 @@
     <!-- Base application theme. -->
     <style name="Theme.Budgettracker" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/card_blue</item>
-        <item name="colorPrimaryVariant">@color/card_blue</item>
+        <item name="colorPrimary">@color/primary</item>
+        <item name="colorPrimaryVariant">@color/primary</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -15,7 +15,7 @@
         <item name="android:textAppearance">@style/Theme.Text</item>
 
         <!--  Edge Effect (Overscroll) RecyclerView Color -->
-        <item name="android:colorEdgeEffect">@color/card_blue</item>
+        <item name="android:colorEdgeEffect">@color/primary</item>
 
         <item name="fontFamily">sans-serif-light</item>
         <item name="android:fontFamily">sans-serif-thin</item>

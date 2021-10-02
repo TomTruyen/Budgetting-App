@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="end|bottom"
         android:src="@drawable/ic_check"
-        android:backgroundTint="@color/card_blue"
+        android:backgroundTint="@color/primary"
         app:borderWidth="0dp"
         app:tint="@color/white"
         android:layout_margin="8dp"
