@@ -4,6 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.EditText
+import androidx.appcompat.widget.SwitchCompat
 import com.tomtruyen.budgettracker.R
 
 class TransactionAddActivity : AppCompatActivity() {
@@ -23,10 +25,21 @@ class TransactionAddActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem) = when(item.itemId) {
         R.id.btn_add_transaction -> {
-            finish()
+            addTransaction()
             true
         }
 
         else -> { super.onOptionsItemSelected(item) }
+    }
+
+    private fun addTransaction() {
+        val title = findViewById<EditText>(R.id.edit_text_title).text
+        val price = findViewById<EditText>(R.id.edit_text_price).text
+        val isIncome = findViewById<SwitchCompat>(R.id.switch_type).isChecked
+
+        // TODO
+        // Add Transaction to Database & refresh transactions on OverviewFragment
+
+        finish()
     }
 }
