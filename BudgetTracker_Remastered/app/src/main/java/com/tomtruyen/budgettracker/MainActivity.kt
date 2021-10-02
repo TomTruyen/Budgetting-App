@@ -1,11 +1,13 @@
 package com.tomtruyen.budgettracker
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.LinearLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.viewpager2.widget.ViewPager2
+import com.nambimobile.widgets.efab.FabOption
 
 
 class MainActivity : AppCompatActivity() {
@@ -26,7 +28,13 @@ class MainActivity : AppCompatActivity() {
         mTransactionRecyclerView.adapter = TransactionAdapter(this, this)
         mTransactionRecyclerView.layoutManager = LinearLayoutManager(this)
 
-        // Setup Vertical RecyclerView
-//        mTransactionRecyclerView.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        findViewById<FabOption>(R.id.btn_income).setOnClickListener { openTransactionActivity(true) }
+        findViewById<FabOption>(R.id.btn_expense).setOnClickListener { openTransactionActivity(false) }
+    }
+
+    fun openTransactionActivity(isIncome: Boolean) {
+        val intent = Intent(this, TransactionAddActivity::class.java)
+        intent.putExtra("isIncome", isIncome)
+        startActivity(intent)
     }
 }

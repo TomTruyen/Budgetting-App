@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Budgettracker</string>
     <string name="my_accounts">My Accounts</string>
+    <string name="add_transaction">Add Transaction</string>
+    <string name="title">Title</string>
+    <string name="amount">Amount</string>
 </resources>

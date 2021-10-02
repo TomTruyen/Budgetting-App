@@ -63,7 +63,7 @@
             app:efab_iconAnimationRotationDeg="-225" />
 
         <com.nambimobile.widgets.efab.FabOption
-            android:id="@+id/incomeBtn"
+            android:id="@+id/btn_income"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_color="@android:color/holo_green_dark"
@@ -72,7 +72,7 @@
             app:label_text="Add income" />
 
         <com.nambimobile.widgets.efab.FabOption
-            android:id="@+id/expenseBtn"
+            android:id="@+id/btn_expense"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             app:fab_color="@android:color/holo_red_light"

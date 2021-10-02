@@ -10,13 +10,17 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Budgettracker">
         <activity
-            android:name=".TransactionActivity"
+            android:name=".TransactionAddActivity"
             android:parentActivityName=".MainActivity"
             android:exported="true" />
         <activity
+            android:name=".TransactionActivity"
+            android:exported="true"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".AccountAddActivity"
-            android:parentActivityName=".MainActivity"
-            android:exported="true" />
+            android:exported="true"
+            android:parentActivityName=".MainActivity" />
         <activity
             android:name=".MainActivity"
             android:exported="true">
