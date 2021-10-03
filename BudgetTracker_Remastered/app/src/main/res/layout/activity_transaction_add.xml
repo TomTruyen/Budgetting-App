@@ -50,6 +50,26 @@
                 android:inputType="numberDecimal" />
         </LinearLayout>
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginVertical="8dp"
+        android:gravity="center"
+        android:orientation="horizontal"
+        android:weightSum="1">
+        <Spinner
+            android:id="@+id/spinner_category"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.5"
+            android:background="@drawable/spinner_outline"
+            android:popupBackground="@drawable/spinner_popup_background"
+            android:spinnerMode="dropdown"
+            tools:listitem="@layout/category_item"
+            />
+    </LinearLayout>
+
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_type"

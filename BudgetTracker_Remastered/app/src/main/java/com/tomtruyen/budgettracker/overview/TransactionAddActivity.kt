@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.EditText
+import android.widget.Spinner
 import androidx.appcompat.widget.SwitchCompat
 import com.tomtruyen.budgettracker.R
 
@@ -15,6 +16,10 @@ class TransactionAddActivity : AppCompatActivity() {
 
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeAsUpIndicator(R.drawable.ic_close)
+
+        val spinner = findViewById<Spinner>(R.id.spinner_category)
+        spinner.adapter = TransactionAddAdapter(this)
+        spinner.setSelection(1)
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
